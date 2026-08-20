@@ -745,13 +745,13 @@ export const Cotizaciones = () => {
               />
             </div>
             
-            <div className="mt-8 pt-6 border-t border-slate-200 flex justify-between items-center">
-              <div className="text-lg font-bold text-slate-900 uppercase tracking-wide">
+            <div className="mt-8 pt-6 border-t border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center">
+              <div className="text-lg font-bold text-slate-900 uppercase tracking-wide text-center md:text-left">
                 Monto Total del Documento: S/ {subtotal.toFixed(2)}
               </div>
               <button 
                 onClick={handleExportPDF}
-                className="bg-[#3162fa] hover:bg-[#1a4cd6] text-white py-3 px-8 font-semibold uppercase tracking-widest transition-colors flex items-center gap-3 rounded-none"
+                className="w-full md:w-auto bg-[#3162fa] hover:bg-[#1a4cd6] text-white py-3 px-8 font-semibold uppercase tracking-widest transition-colors flex items-center justify-center gap-3 rounded-none"
               >
                 <Download size={18} />
                 Generar PDF y Guardar
@@ -767,7 +767,8 @@ export const Cotizaciones = () => {
         <div className="bg-slate-100 border-b border-slate-300 px-6 py-4 flex justify-between items-center">
           <h3 className="font-semibold text-slate-700 uppercase tracking-wide">Historial de Cotizaciones Emitidas</h3>
         </div>
-        <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm min-w-[800px]">
           <thead className="bg-slate-50 border-b border-slate-200 text-slate-600">
             <tr>
               <th className="px-6 py-4 font-semibold uppercase tracking-wider text-xs">Fecha</th>
@@ -819,6 +820,7 @@ export const Cotizaciones = () => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

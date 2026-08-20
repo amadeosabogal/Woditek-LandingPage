@@ -135,7 +135,8 @@ export const Clientes = () => {
       </div>
 
       <div className="bg-white border border-slate-300 shadow-sm rounded-none overflow-hidden">
-        <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm min-w-[800px]">
           <thead className="bg-slate-100 border-b border-slate-300 text-slate-700">
             <tr>
               <th className="px-6 py-4 font-semibold uppercase tracking-wider text-xs w-16 text-center">Tipo</th>
@@ -187,6 +188,7 @@ export const Clientes = () => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );
