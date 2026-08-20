@@ -186,9 +186,9 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
         debtRes, cliRes, workRes,
         projRes, quoteRes
       ] = await Promise.all([
-        authFetch(`${API_BASE}/ingresos`), authFetch(`${API_BASE}/adelantos`), authFetch(`${API_BASE}/pagos`),
-        authFetch(`${API_BASE}/deudas`), authFetch(`${API_BASE}/clientes`), authFetch(`${API_BASE}/trabajadores`),
-        authFetch(`${API_BASE}/proyectos`), authFetch(`${API_BASE}/cotizaciones`)
+        apiFetch(`${API_BASE}/ingresos`), apiFetch(`${API_BASE}/adelantos`), apiFetch(`${API_BASE}/pagos`),
+        apiFetch(`${API_BASE}/deudas`), apiFetch(`${API_BASE}/clientes`), apiFetch(`${API_BASE}/trabajadores`),
+        apiFetch(`${API_BASE}/proyectos`), apiFetch(`${API_BASE}/cotizaciones`)
       ]);
       
       setIncomes(await incRes.json());
