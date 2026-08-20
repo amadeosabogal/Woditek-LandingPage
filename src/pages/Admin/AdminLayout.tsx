@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import logoUrl from '../../assets/logo_blue.png';
 
 import { 
@@ -18,6 +18,7 @@ import {
 
 export const AdminLayout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = [
     { to: '.', icon: <LayoutDashboard size={20} />, label: 'Dashboard', end: true },
@@ -32,6 +33,14 @@ export const AdminLayout = () => {
   ];
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    localStorage.removeItem('woditek_admin_auth');
+    localStorage.removeItem('woditek_admin_token');
+    localStorage.removeItem('woditek_admin_user');
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-slate-900 flex font-sans overflow-hidden">
@@ -81,13 +90,13 @@ export const AdminLayout = () => {
         </nav>
 
         <div className="p-4 border-t border-slate-300">
-          <NavLink
-            to="/"
-            className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
           >
             <LogOut size={20} />
             Salir
-          </NavLink>
+          </button>
         </div>
       </aside>
 

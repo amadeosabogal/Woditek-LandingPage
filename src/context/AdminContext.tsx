@@ -146,14 +146,34 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
 
+  const authFetch = async (url: string, options: RequestInit = {}) => {
+    const token = localStorage.getItem('woditek_admin_token');
+    const headers = new Headers(options.headers || {});
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+    
+    return fetch(url, {
+      ...options,
+      headers
+    });
+  };
+
   const apiFetch = async (url: string, options?: RequestInit) => {
     try {
-      const res = await fetch(url, options);
+      const res = await authFetch(url, options);
+      if (res.status === 403 || res.status === 401) {
+        // Token inválido o expirado
+        localStorage.removeItem('woditek_admin_auth');
+        localStorage.removeItem('woditek_admin_token');
+        window.location.href = '/login';
+        throw new Error('No autorizado');
+      }
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return res;
     } catch (error) {
       console.error("API Fetch Error:", error);
-      alert("Ocurrió un error al guardar los datos en el servidor. Revisa tu conexión o intenta nuevamente.");
+      alert("Ocurrió un error al contactar al servidor. Revisa tu conexión o vuelve a iniciar sesión.");
       throw error;
     }
   };
@@ -166,9 +186,9 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
         debtRes, cliRes, workRes,
         projRes, quoteRes
       ] = await Promise.all([
-        fetch(`${API_BASE}/ingresos`), fetch(`${API_BASE}/adelantos`), fetch(`${API_BASE}/pagos`),
-        fetch(`${API_BASE}/deudas`), fetch(`${API_BASE}/clientes`), fetch(`${API_BASE}/trabajadores`),
-        fetch(`${API_BASE}/proyectos`), fetch(`${API_BASE}/cotizaciones`)
+        authFetch(`${API_BASE}/ingresos`), authFetch(`${API_BASE}/adelantos`), authFetch(`${API_BASE}/pagos`),
+        authFetch(`${API_BASE}/deudas`), authFetch(`${API_BASE}/clientes`), authFetch(`${API_BASE}/trabajadores`),
+        authFetch(`${API_BASE}/proyectos`), authFetch(`${API_BASE}/cotizaciones`)
       ]);
       
       setIncomes(await incRes.json());
