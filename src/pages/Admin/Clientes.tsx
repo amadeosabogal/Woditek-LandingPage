@@ -13,7 +13,8 @@ export const Clientes = () => {
     if ((type === 'empresa' || type === 'persona') && document.length === 11) {
       const fetchRuc = async () => {
         try {
-                    const res = await fetch(`http://localhost:3001/admin/sunat/${document}`, {
+          const API_BASE = import.meta.env.VITE_API_ADMIN || 'http://localhost:3001/admin';
+          const res = await fetch(`${API_BASE}/sunat/${document}`, {
             headers: {
               'Content-Type': 'application/json'
             }
@@ -32,7 +33,8 @@ export const Clientes = () => {
     } else if (type === 'dni' && document.length === 8) {
       const fetchDni = async () => {
         try {
-                    const res = await fetch(`http://localhost:3001/admin/reniec/${document}`, {
+          const API_BASE = import.meta.env.VITE_API_ADMIN || 'http://localhost:3001/admin';
+          const res = await fetch(`${API_BASE}/reniec/${document}`, {
             headers: {
               'Content-Type': 'application/json'
             }

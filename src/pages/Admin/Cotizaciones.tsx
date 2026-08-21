@@ -59,7 +59,8 @@ export const Cotizaciones = () => {
     if ((newClientType === 'empresa' || newClientType === 'persona') && newClientDoc.length === 11) {
       const fetchRuc = async () => {
         try {
-                    const res = await fetch(`http://localhost:3001/admin/sunat/${newClientDoc}`, {
+          const API_BASE = import.meta.env.VITE_API_ADMIN || 'http://localhost:3001/admin';
+          const res = await fetch(`${API_BASE}/sunat/${newClientDoc}`, {
             headers: {
               'Content-Type': 'application/json'
             }
@@ -78,7 +79,8 @@ export const Cotizaciones = () => {
     } else if (newClientType === 'dni' && newClientDoc.length === 8) {
       const fetchDni = async () => {
         try {
-                    const res = await fetch(`http://localhost:3001/admin/reniec/${newClientDoc}`, {
+          const API_BASE = import.meta.env.VITE_API_ADMIN || 'http://localhost:3001/admin';
+          const res = await fetch(`${API_BASE}/reniec/${newClientDoc}`, {
             headers: {
               'Content-Type': 'application/json'
             }
