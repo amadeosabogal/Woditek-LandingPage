@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import logoUrl from '../../assets/logo_blue.png';
 
@@ -13,12 +13,48 @@ import {
   Briefcase,
   HardHat,
   Menu,
-  X
+  X,
+  Download
 } from 'lucide-react';
+
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
 
 export const AdminLayout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setIsInstallable(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setIsInstallable(false);
+      setDeferredPrompt(null);
+    }
+  };
 
   const navItems = [
     { to: '.', icon: <LayoutDashboard size={20} />, label: 'Dashboard', end: true },
@@ -89,7 +125,16 @@ export const AdminLayout = () => {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-300">
+        <div className="p-4 border-t border-slate-300 space-y-2">
+          {isInstallable && (
+            <button
+              onClick={handleInstallClick}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium bg-[#3162fa] text-white rounded hover:bg-[#1a4cd6] transition-colors"
+            >
+              <Download size={20} />
+              Instalar App
+            </button>
+          )}
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
