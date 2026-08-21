@@ -22,7 +22,8 @@ export const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/admin/login', {
+      const API_BASE = import.meta.env.VITE_API_ADMIN || 'http://localhost:3001/admin';
+      const response = await fetch(`${API_BASE}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
