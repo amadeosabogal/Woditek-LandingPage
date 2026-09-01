@@ -4,6 +4,19 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api-admin': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+      '/api-scraper': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api-scraper/, '/api')
+      }
+    }
+  },
   plugins: [
     react(),
     VitePWA({

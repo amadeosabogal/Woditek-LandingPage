@@ -1,3 +1,4 @@
+import CRMRoutes from './CRMRoutes';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';
 import { AdminLayout } from './pages/Admin/AdminLayout';
@@ -24,6 +25,9 @@ export default function App() {
 
         {/* Ruta pública de Login */}
         <Route path="/login" element={<Login />} />
+
+        {/* Rutas del CRM */}
+        <Route path="/crm/*" element={<CRMRoutes />} />
 
         {/* Rutas de Administracion (Protegidas) */}
         <Route element={<ProtectedRoute />}>
