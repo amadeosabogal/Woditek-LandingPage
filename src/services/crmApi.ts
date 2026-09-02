@@ -1,6 +1,6 @@
-const SCRAPER_URL = 'http://localhost:8000';
+const SCRAPER_URL = import.meta.env.VITE_CRM_API || 'http://localhost:8000/api';
 export const sendEmail = async (toEmail: string, subject: string, body: string, isHtml: boolean = false) => {
-  const res = await fetch(`${SCRAPER_URL}/api/emails/send`, {
+  const res = await fetch(`${SCRAPER_URL}/emails/send`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ to_email: toEmail, subject, body, is_html: isHtml })
