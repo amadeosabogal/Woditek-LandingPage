@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLoader } from '../../context/CRM/LoaderContext';
 
-const API_BASE = 'http://127.0.0.1:8000/api';
+const API_BASE = import.meta.env.VITE_CRM_API || 'http://127.0.0.1:8000/api';
 
 const CaptacionLeads: React.FC = () => {
   const { showLoader, hideLoader } = useLoader();
@@ -19,8 +19,76 @@ const CaptacionLeads: React.FC = () => {
     setTimeout(() => setNotification(null), 5000); // Ocultar después de 5 segundos
   };
 
-  // Search States
+  // Task Progress States
   const [isSearching, setIsSearching] = useState(false);
+  const [taskId, setTaskId] = useState<string | null>(null);
+  const [taskProgress, setTaskProgress] = useState(0);
+  const [taskStatusText, setTaskStatusText] = useState('');
+  const eventSourceRef = useRef<EventSource | null>(null);
+
+  const listenToTaskStream = (newTaskId: string) => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
+    setTaskId(newTaskId);
+    setTaskProgress(5);
+    setTaskStatusText('Iniciando proceso...');
+    
+    const es = new EventSource(`${API_BASE}/tasks/${newTaskId}/events`);
+    eventSourceRef.current = es;
+
+    es.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        const pct = data.percent || 0;
+        setTaskProgress(pct);
+        setTaskStatusText(data.message || 'Procesando...');
+
+        if (data.status === 'completado') {
+          es.close();
+          eventSourceRef.current = null;
+          setTimeout(() => {
+            setTaskId(null);
+            setIsSearching(false);
+            hideLoader();
+          }, 2500);
+          showNotification('Proceso completado. Revisa los resultados.', 'success');
+        } else if (data.status === 'error') {
+          es.close();
+          eventSourceRef.current = null;
+          setTaskStatusText(`Error: ${data.message}`);
+          setTimeout(() => {
+            setTaskId(null);
+            setIsSearching(false);
+            hideLoader();
+          }, 4000);
+          showNotification(data.message, 'error');
+        }
+      } catch (e) {
+        console.error('Error parsing SSE', e);
+      }
+    };
+
+    es.onerror = () => {
+      es.close();
+      eventSourceRef.current = null;
+      setTimeout(() => {
+        setTaskId(null);
+        setIsSearching(false);
+        hideLoader();
+      }, 2000);
+    };
+  };
+
+  const stopTask = async () => {
+    if (!taskId) return;
+    setTaskStatusText('Deteniendo...');
+    try {
+      await fetch(`${API_BASE}/tasks/${taskId}/stop`, { method: 'POST' });
+    } catch (e) {
+      console.error(e);
+    }
+  };
   
   const [searchLeadsForm, setSearchLeadsForm] = useState({
     title: 'Gerente de Ventas',
@@ -88,10 +156,15 @@ const CaptacionLeads: React.FC = () => {
         body: JSON.stringify(searchLeadsForm)
       });
       if (!res.ok) throw new Error('Error al iniciar la búsqueda');
-      showNotification('Búsqueda iniciada. Ve a "Lista de Leads" para ver los perfiles conforme el scraper los extraiga.');
+      const data = await res.json();
+      if (data.task_id) {
+        listenToTaskStream(data.task_id);
+      } else {
+        setIsSearching(false);
+        hideLoader();
+      }
     } catch (err: any) {
       showNotification(err.message, 'error');
-    } finally {
       setIsSearching(false);
       hideLoader();
     }
@@ -108,10 +181,15 @@ const CaptacionLeads: React.FC = () => {
         body: JSON.stringify(searchJobsForm)
       });
       if (!res.ok) throw new Error('Error al iniciar la búsqueda');
-      showNotification('Búsqueda de empleos iniciada. Ve a "Lista de Leads" para ver los resultados.');
+      const data = await res.json();
+      if (data.task_id) {
+        listenToTaskStream(data.task_id);
+      } else {
+        setIsSearching(false);
+        hideLoader();
+      }
     } catch (err: any) {
       showNotification(err.message, 'error');
-    } finally {
       setIsSearching(false);
       hideLoader();
     }
@@ -128,10 +206,15 @@ const CaptacionLeads: React.FC = () => {
         body: JSON.stringify(companyForm)
       });
       if (!res.ok) throw new Error('Error al analizar la empresa');
-      showNotification('Análisis de empresa iniciado. Ve a "Lista de Leads" para ver los resultados.');
+      const data = await res.json();
+      if (data.task_id) {
+        listenToTaskStream(data.task_id);
+      } else {
+        setIsSearching(false);
+        hideLoader();
+      }
     } catch (err: any) {
       showNotification(err.message, 'error');
-    } finally {
       setIsSearching(false);
       hideLoader();
     }
@@ -148,10 +231,15 @@ const CaptacionLeads: React.FC = () => {
         body: JSON.stringify(inspectForm)
       });
       if (!res.ok) throw new Error('Error al inspeccionar el enlace');
-      showNotification('Inspección iniciada. Ve a "Lista de Leads" en unos segundos.');
+      const data = await res.json();
+      if (data.task_id) {
+        listenToTaskStream(data.task_id);
+      } else {
+        setIsSearching(false);
+        hideLoader();
+      }
     } catch (err: any) {
       showNotification(err.message, 'error');
-    } finally {
       setIsSearching(false);
       hideLoader();
     }
@@ -159,6 +247,18 @@ const CaptacionLeads: React.FC = () => {
 
   return (
     <div className="p-6 h-full flex flex-col gap-6 overflow-y-auto">
+      <style>
+        {`
+          @keyframes indeterminate {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(300%); }
+          }
+          .animate-indeterminate {
+            animation: indeterminate 1.5s infinite ease-in-out;
+          }
+        `}
+      </style>
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-headline-md font-headline-md text-primary">Captación de Leads (LinkedIn Scraper)</h1>
@@ -203,11 +303,44 @@ const CaptacionLeads: React.FC = () => {
         </div>
       )}
 
+      
+      {/* Banner de Progreso (Visible cuando hay una tarea activa) */}
+      {taskId && (
+        <div className="bg-surface border border-primary/30 rounded-xl p-5 shadow-sm flex flex-col gap-3 relative overflow-hidden mt-4">
+          <div className="absolute left-0 top-0 w-1.5 h-full bg-primary animate-pulse"></div>
+          <div className="flex items-center justify-between ml-2">
+            <div className="flex items-center gap-3">
+              <span className="relative flex h-3.5 w-3.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-primary"></span>
+              </span>
+              <span className="font-bold text-sm text-on-surface">{taskStatusText}</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-bold text-primary">{taskProgress}%</span>
+              <button 
+                onClick={stopTask}
+                className="text-status-na hover:bg-status-na/10 px-3 py-1.5 rounded-md text-xs font-bold transition-colors border border-status-na/30 flex items-center gap-1"
+              >
+                <span className="material-symbols-outlined text-[16px]">stop_circle</span>
+                Detener
+              </button>
+            </div>
+          </div>
+          <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden ml-2">
+            <div 
+              className="h-full bg-primary transition-all duration-300 ease-out" 
+              style={{ width: `${taskProgress}%` }}
+            ></div>
+          </div>
+        </div>
+      )}
+
       {/* Pestañas de Búsqueda */}
       {sessionActive && (
         <div className="bg-surface border border-border-subtle rounded-xl shadow-sm overflow-hidden flex-1 flex flex-col">
           {/* Nav Tabs */}
-          <div className="flex border-b border-border-subtle bg-surface-muted/30">
+          <div className="flex border-b border-border-subtle bg-surface-muted/30 relative">
             <button 
               className={`flex-1 py-4 text-center font-bold transition-colors ${activeTab === 'leads' ? 'bg-surface text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:bg-surface-muted'}`}
               onClick={() => setActiveTab('leads')}
@@ -232,6 +365,11 @@ const CaptacionLeads: React.FC = () => {
             >
               Inspector de Enlace
             </button>
+            {isSearching && (
+              <div className="absolute bottom-0 left-0 w-full h-[3px] bg-blue-100 overflow-hidden z-10">
+                <div className="h-full bg-[#3162fa] w-1/3 animate-indeterminate rounded-r-full"></div>
+              </div>
+            )}
           </div>
 
           <div className="p-5 flex-1 overflow-y-auto">

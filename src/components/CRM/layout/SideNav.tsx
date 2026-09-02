@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/CRM/AuthContext';
 import { 
@@ -20,10 +20,30 @@ interface SideNavProps {
   closeMobileMenu: () => void;
 }
 
+const API_BASE = import.meta.env.VITE_CRM_API || 'http://127.0.0.1:8000/api';
+
 const SideNav: React.FC<SideNavProps> = ({ isMobileMenuOpen, closeMobileMenu }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, hasPermiso } = useAuth();
+  const [leadsCount, setLeadsCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/leads`);
+        if (res.ok) {
+          const data = await res.json();
+          setLeadsCount(data.length);
+        }
+      } catch (e) {
+        // Silently fail if scraper is down
+      }
+    };
+    fetchCount();
+    const interval = setInterval(fetchCount, 10000); // Polling cada 10s
+    return () => clearInterval(interval);
+  }, []);
   
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -33,7 +53,7 @@ const SideNav: React.FC<SideNavProps> = ({ isMobileMenuOpen, closeMobileMenu }) 
   
   const navItems = [
     { path: `/crm/captacion-leads`, icon: <Search size={20} />, label: 'Captación de Leads', show: true },
-    { path: `/crm/leads`, icon: <List size={20} />, label: 'Lista de Leads', show: true },
+    { path: `/crm/leads`, icon: <List size={20} />, label: 'Lista de Leads', show: true, badge: leadsCount },
     { path: `/crm/bandeja`, icon: <MessageSquare size={20} />, label: 'Bandeja de Mensajes', show: true },
     { path: `/crm/usuarios`, icon: <Users size={20} />, label: 'Usuarios', show: hasPermiso('usuarios.ver') },
     { path: `/crm/roles`, icon: <ShieldAlert size={20} />, label: 'Roles y Permisos', show: hasPermiso('usuarios.editar') },
@@ -73,10 +93,17 @@ const SideNav: React.FC<SideNavProps> = ({ isMobileMenuOpen, closeMobileMenu }) 
                   : 'text-slate-500 border-transparent hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
-              <div className={isActive ? 'text-[#3162fa]' : ''}>
-                {item.icon}
+              <div className="flex items-center gap-3 flex-1">
+                <div className={isActive ? 'text-[#3162fa]' : ''}>
+                  {item.icon}
+                </div>
+                {item.label}
               </div>
-              {item.label}
+              {item.badge !== undefined && item.badge !== null && (
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isActive ? 'bg-[#3162fa]/10 text-[#3162fa]' : 'bg-slate-200 text-slate-700'}`}>
+                  {item.badge}
+                </span>
+              )}
             </NavLink>
           );
         })}

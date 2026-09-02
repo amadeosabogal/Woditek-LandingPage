@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLoader } from '../../../../context/CRM/LoaderContext';
 
-const API_BASE = 'http://127.0.0.1:8000/api';
+const API_BASE = import.meta.env.VITE_CRM_API || 'http://127.0.0.1:8000/api';
 
 const LinkedInConfig: React.FC = () => {
   const { showLoader, hideLoader } = useLoader();
