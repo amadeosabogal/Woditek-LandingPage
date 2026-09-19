@@ -192,8 +192,8 @@ export default function Landing() {
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center pt-24 overflow-hidden bg-[#0c121f]">
         <div className="absolute inset-0 z-0">
-          <img src="/ChatGPT Image 18 sept 2026, 11_30_18.png" alt="Business IT Solutions Desktop" className="hidden md:block w-full h-full object-cover object-right" />
-          <img src="/Gemini_Generated_Image_a1af2ka1af2ka1af.jpg" alt="Business IT Solutions Mobile" className="block md:hidden w-full h-full object-cover object-center" />
+          <img src="/ChatGPT Image 18 sept 2026, 11_30_18.webp" alt="Business IT Solutions Desktop" className="hidden md:block w-full h-full object-cover object-right" />
+          <img src="/Gemini_Generated_Image_a1af2ka1af2ka1af.webp" alt="Business IT Solutions Mobile" className="block md:hidden w-full h-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0c121f] via-[#0c121f]/90 to-transparent md:bg-gradient-to-r md:from-[#0c121f] md:via-[#0c121f]/90 md:to-transparent bg-gradient-to-t from-[#0c121f] via-[#0c121f]/80 to-transparent"></div>
         </div>
 
@@ -231,7 +231,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img loading="lazy" src="/service_software.jpg" alt="Software a medida" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_software.webp" alt="Software a medida" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -250,7 +250,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img loading="lazy" src="/service_web.jpg" alt="Desarrollo Web" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_web.webp" alt="Desarrollo Web" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -269,7 +269,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img loading="lazy" src="/service_automation.jpg" alt="Automatización" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_automation.webp" alt="Automatización" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -288,7 +288,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img loading="lazy" src="/service_ai.jpg" alt="Inteligencia Artificial" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_ai.webp" alt="Inteligencia Artificial" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -307,7 +307,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img loading="lazy" src="/service_integration.jpg" alt="Integraciones" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_integration.webp" alt="Integraciones" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -326,7 +326,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img loading="lazy" src="/service_dashboard.jpg" alt="Dashboards" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_dashboard.webp" alt="Dashboards" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -591,10 +591,10 @@ export default function Landing() {
 
           <div className="space-y-4">
             {[
-              { q: "¿Cuánto cuesta desarrollar un software a medida?", a: "Depende de las funcionalidades, cantidad de usuarios, integraciones y complejidad del proyecto." },
-              { q: "¿Pueden adaptar el sistema a nuestros procesos?", a: "Sí. El software se desarrolla de acuerdo con las necesidades específicas de cada negocio." },
-              { q: "¿El sistema funciona desde celular?", a: "Sí, dependiendo del proyecto podemos desarrollar interfaces adaptadas para computadoras, tablets y dispositivos móviles." },
-              { q: "¿Pueden integrar otros servicios?", a: "Sí. Podemos conectar el sistema con APIs y servicios externos según las necesidades del proyecto." }
+              { q: "¿Cuánto cuesta desarrollar un software a medida?", a: "Nuestros proyectos son inversiones diseñadas para multiplicar tu rentabilidad. El costo se adapta al tamaño de tu visión y a los objetivos de tu empresa. Contáctanos para una asesoría gratuita y diseñaremos una propuesta a tu medida sin compromiso." },
+              { q: "¿Pueden adaptar el sistema a nuestros procesos?", a: "¡Absolutamente! No te obligamos a adaptarte a un software rígido. Construimos una plataforma exclusiva que se amolda milimétricamente a tu forma de trabajar, automatizando tus tareas para que tu equipo sea mucho más productivo." },
+              { q: "¿El sistema funciona desde celular?", a: "Sí. Todo lo que construimos es 100% responsivo. Podrás gestionar tu negocio, revisar reportes y controlar tus operaciones desde cualquier dispositivo: computadora, tablet o smartphone, en cualquier parte del mundo." },
+              { q: "¿Pueden integrar otros servicios?", a: "Por supuesto. Conectamos tu nuevo sistema con tus herramientas favoritas (pasarelas de pago, facturación electrónica, WhatsApp, redes sociales) para centralizar absolutamente toda tu operación en un solo lugar." }
             ].map((faq, idx) => (
               <div key={idx} className="border border-slate-200 rounded-sm overflow-hidden bg-slate-50">
                 <button 
