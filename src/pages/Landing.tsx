@@ -231,7 +231,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img src="/service_software.jpg" alt="Software a medida" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_software.jpg" alt="Software a medida" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -250,7 +250,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img src="/service_web.jpg" alt="Desarrollo Web" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_web.jpg" alt="Desarrollo Web" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -269,7 +269,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img src="/service_automation.jpg" alt="Automatización" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_automation.jpg" alt="Automatización" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -288,7 +288,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img src="/service_ai.jpg" alt="Inteligencia Artificial" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_ai.jpg" alt="Inteligencia Artificial" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -307,7 +307,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img src="/service_integration.jpg" alt="Integraciones" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_integration.jpg" alt="Integraciones" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -326,7 +326,7 @@ export default function Landing() {
             <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
               <div className="w-full h-56 overflow-hidden relative shrink-0">
-                <img src="/service_dashboard.jpg" alt="Dashboards" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" src="/service_dashboard.jpg" alt="Dashboards" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
               <div className="p-8 md:p-10 flex flex-col flex-grow">
@@ -528,7 +528,7 @@ export default function Landing() {
                 </p>
               </div>
               <div className="flex items-center">
-                <img src="https://i.pravatar.cc/150?img=32" alt="María Fernández" className="w-12 h-12 rounded-full mr-4 border-2 border-blue-400 object-cover" />
+                <img loading="lazy" src="https://i.pravatar.cc/150?img=32" alt="María Fernández" className="w-12 h-12 rounded-full mr-4 border-2 border-blue-400 object-cover" />
                 <div>
                   <h4 className="font-heading font-bold uppercase tracking-wider text-sm">María Fernández</h4>
                 </div>
@@ -550,7 +550,7 @@ export default function Landing() {
                 </p>
               </div>
               <div className="flex items-center">
-                <img src="https://i.pravatar.cc/150?img=11" alt="Carlos Gómez" className="w-12 h-12 rounded-full mr-4 border-2 border-blue-400 object-cover" />
+                <img loading="lazy" src="https://i.pravatar.cc/150?img=11" alt="Carlos Gómez" className="w-12 h-12 rounded-full mr-4 border-2 border-blue-400 object-cover" />
                 <div>
                   <h4 className="font-heading font-bold uppercase tracking-wider text-sm">Carlos Gómez</h4>
                 </div>
@@ -572,7 +572,7 @@ export default function Landing() {
                 </p>
               </div>
               <div className="flex items-center">
-                <img src="https://i.pravatar.cc/150?img=5" alt="Ana López" className="w-12 h-12 rounded-full mr-4 border-2 border-blue-400 object-cover" />
+                <img loading="lazy" src="https://i.pravatar.cc/150?img=5" alt="Ana López" className="w-12 h-12 rounded-full mr-4 border-2 border-blue-400 object-cover" />
                 <div>
                   <h4 className="font-heading font-bold uppercase tracking-wider text-sm">Ana López</h4>
                 </div>
