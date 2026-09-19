@@ -4,6 +4,8 @@ import Landing from './pages/Landing';
 import { AdminLayout } from './pages/Admin/AdminLayout';
 import { AdminProvider } from './context/AdminContext';
 import { Login } from './pages/Admin/Login';
+import { ForgotPassword } from './pages/Admin/ForgotPassword';
+import { ResetPassword } from './pages/Admin/ResetPassword';
 import { ProtectedRoute } from './components/ProtectedRoute';
 // Vistas de administracion
 import { Dashboard } from './pages/Admin/Dashboard';
@@ -15,6 +17,7 @@ import { Cotizaciones } from './pages/Admin/Cotizaciones';
 import { Clientes } from './pages/Admin/Clientes';
 import { Proyectos } from './pages/Admin/Proyectos';
 import { Trabajadores } from './pages/Admin/Trabajadores';
+import { Leads } from './pages/Admin/Leads';
 
 export default function App() {
   return (
@@ -25,6 +28,8 @@ export default function App() {
 
         {/* Ruta pública de Login */}
         <Route path="/login" element={<Login />} />
+        <Route path="/super-admin/forgot-password" element={<ForgotPassword />} />
+        <Route path="/super-admin/reset-password" element={<ResetPassword />} />
 
         {/* Rutas del CRM */}
         <Route path="/crm/*" element={<CRMRoutes />} />
@@ -48,6 +53,7 @@ export default function App() {
           <Route path="clientes" element={<Clientes />} />
           <Route path="proyectos" element={<Proyectos />} />
           <Route path="trabajadores" element={<Trabajadores />} />
+          <Route path="leads" element={<Leads />} />
         </Route>
         </Route>
       </Routes>

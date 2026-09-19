@@ -1,1270 +1,758 @@
 import React, { useState, useEffect } from 'react';
 import { Logo } from '../components/Logo';
-import { TypewriterTitle } from '../components/TypewriterTitle';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
-
-import heroBg from '../assets/hero.png';
-import imgDesarrolloMedida from '../assets/desarrollo_medida.png';
-import imgAppsMovilesWeb from '../assets/apps_moviles_web.png';
-import imgSistemasGestion from '../assets/sistemas_gestion.png';
-import imgMantenimientoSoporte from '../assets/mantenimiento_soporte.png';
-import imgConsultoriaTecnologica from '../assets/consultoria_tecnologica.png';
-import imgProgramacion from '../assets/programacion.png';
-import imgFlujo from '../assets/flujo.png';
+import { FadeIn } from '../components/FadeIn';
 import {
-  CheckCircle,
+  Phone,
+  Mail,
+  Briefcase,
+  Headphones,
+  Cloud,
   Menu,
   X,
-  ChevronLeft,
   ChevronRight,
-  Trash2,
-  Key,
-  Cpu,
-  ShieldCheck,
-  Activity,
-  Phone,
+  ChevronDown,
   MapPin,
-  Mail
+  Monitor,
+  Globe,
+  Zap,
+  Bot,
+  Link2,
+  BarChart,
+  ArrowRight,
+  CheckCircle2,
+  Settings,
+  Layout,
+  Maximize,
+  Cpu,
+  Utensils,
+  Scissors,
+  Activity,
+  Store,
+  Building2,
+  Quote,
+  Star,
+  Check
 } from 'lucide-react';
 
-interface ContactForm {
-  name: string;
-  email: string;
-  company: string;
-  phone: string;
-  country: string;
-  message: string;
-  privacyAccepted: boolean;
-}
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  company?: string;
-  phone?: string;
-  country?: string;
-  message?: string;
-  privacyAccepted?: string;
-}
+const InstagramIcon = ({ className }: { className?: string }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
+);
+const WhatsAppIcon = ({ className }: { className?: string }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" /></svg>
+);
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 2.22-1.15 4.35-2.85 5.72-1.8 1.45-4.23 2-6.49 1.5-2.31-.5-4.29-2.02-5.18-4.21-.92-2.27-.63-4.99.78-7.01 1.34-1.94 3.65-3.07 5.99-3.13v4.11c-1.32.06-2.58.74-3.35 1.83-.8 1.1-.1 2.14.61 2.9.61.64 1.52.92 2.38.83 1.05-.09 2.05-.72 2.58-1.64.44-.76.62-1.66.52-2.55-.02-6.57-.01-13.14-.02-19.71z"/></svg>
+);
 
 export default function Landing() {
-  // Estado para el menú móvil
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Ref y estados para el carrusel de servicios 3D cóncavo
-  const servicesCarouselRef = React.useRef<HTMLDivElement>(null);
-  const [rotationIndex, setRotationIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  const [spacing, setSpacing] = useState(440);
-  const [zStep, setZStep] = useState(10);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffsetIndex, setDragOffsetIndex] = useState(0);
-
-  const dragStartRef = React.useRef<number | null>(null);
-  const isDraggingRef = React.useRef(false);
-
-  useEffect(() => {
-    const updateSize = () => {
-      const width = window.innerWidth;
-      setIsMobile(width < 768);
-      if (width >= 1024) {
-        setSpacing(440); // Espaciado ampliado para eliminar el solape de esquinas completamente
-        setZStep(10);    // Proyección Z reducida al mínimo
-      } else if (width >= 768) {
-        setSpacing(390);
-        setZStep(8);
-      }
-    };
-    updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-
-  const handlePrevClick = () => {
-    if (isMobile) {
-      if (servicesCarouselRef.current) {
-        servicesCarouselRef.current.scrollBy({ left: -320, behavior: 'smooth' });
-      }
-    } else {
-      setRotationIndex(prev => prev - 1);
-    }
-  };
-
-  const handleNextClick = () => {
-    if (isMobile) {
-      if (servicesCarouselRef.current) {
-        servicesCarouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
-      }
-    } else {
-      setRotationIndex(prev => prev + 1);
-    }
-  };
-
-  const handlePointerDown = (e: React.PointerEvent) => {
-    if (isMobile) return;
-    dragStartRef.current = e.clientX;
-    isDraggingRef.current = true;
-    setIsDragging(true);
-    try {
-      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    } catch {
-      // Ignorar errores de captura
-    }
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDraggingRef.current || dragStartRef.current === null) return;
-    const clientX = e.clientX;
-    const deltaX = clientX - dragStartRef.current;
-
-    // Mapeo 1:1 de distancia de arrastre a índice del carrusel
-    const indexShift = deltaX / spacing;
-    setDragOffsetIndex(indexShift);
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    if (!isDraggingRef.current || dragStartRef.current === null) return;
-    isDraggingRef.current = false;
-    setIsDragging(false);
-    try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch {
-      // Ignorar errores de liberación
-    }
-
-    const clientX = e.clientX;
-    const deltaX = clientX - dragStartRef.current;
-    dragStartRef.current = null;
-
-    const indexShift = deltaX / spacing;
-    const threshold = 0.25; // Umbral de 25% de arrastre
-
-    if (indexShift > threshold) {
-      setRotationIndex(prev => prev - 1);
-    } else if (indexShift < -threshold) {
-      setRotationIndex(prev => prev + 1);
-    }
-
-    setDragOffsetIndex(0);
-  };
-
-  const handleCardClick = (idx: number) => {
-    const activeIndex = ((rotationIndex % 5) + 5) % 5;
-    if (idx === activeIndex) return;
-
-    let diff = idx - activeIndex;
-    if (diff > 2) diff -= 5;
-    if (diff < -2) diff += 5;
-    setRotationIndex(prev => prev + diff);
-  };
-
-  const services = [
-    {
-      title: "Desarrollo a Medida",
-      description: "Creación de soluciones tecnológicas desde cero, diseñadas específicamente para los procesos únicos de cada cliente (a diferencia del software genérico).",
-      image: imgDesarrolloMedida,
-    },
-    {
-      title: "Aplicaciones Móviles y Web",
-      description: "Construcción de plataformas accesibles desde cualquier dispositivo, incluyendo iOS, Android y navegadores de internet.",
-      image: imgAppsMovilesWeb,
-    },
-    {
-      title: "Sistemas de Gestión (ERP/CRM)",
-      description: "Desarrollo de plataformas internas para que las empresas automaticen y controlen sus ventas, inventarios, recursos humanos o finanzas.",
-      image: imgSistemasGestion,
-    },
-    {
-      title: "Mantenimiento y Soporte",
-      description: "Actualización constante, corrección de errores y mejoras de seguridad para garantizar que los programas funcionen sin interrupciones.",
-      image: imgMantenimientoSoporte,
-    },
-    {
-      title: "Consultoría Tecnológica",
-      description: "Asesoramiento experto para guiar la transformación digital de un negocio y elegir las mejores herramientas tecnológicas.",
-      image: imgConsultoriaTecnologica,
-    },
-  ];
-
-
-  // Estado del formulario de contacto
-  const [formData, setFormData] = useState<ContactForm>({
-    name: '',
-    email: '',
-    company: '',
-    phone: '',
-    country: 'Perú',
-    message: '',
-    privacyAccepted: false
-  });
-
-  const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
-  // Estados para el efecto de escritura (typewriter) en el Hero
-  const [typedTitle, setTypedTitle] = useState('');
-  const [typedSubtitle, setTypedSubtitle] = useState('');
-  const [isTitleFinished, setIsTitleFinished] = useState(false);
-  const [isSubtitleFinished, setIsSubtitleFinished] = useState(false);
-
-  useEffect(() => {
-    const titleText = "TRANSFORMAMOS TU IDEA EN SOFTWARE INTELIGENTE";
-    const subtitleText = "Productividad, Control y Crecimiento";
-
-    let titleIndex = 0;
-    let subtitleIndex = 0;
-
-    // Iniciamos con un pequeño delay para una entrada suave
-    const startTimeout = setTimeout(() => {
-      const titleInterval = setInterval(() => {
-        if (titleIndex < titleText.length) {
-          setTypedTitle(titleText.substring(0, titleIndex + 1));
-          titleIndex++;
-        } else {
-          clearInterval(titleInterval);
-          setIsTitleFinished(true);
-
-          const subtitleInterval = setInterval(() => {
-            if (subtitleIndex < subtitleText.length) {
-              setTypedSubtitle(subtitleText.substring(0, subtitleIndex + 1));
-              subtitleIndex++;
-            } else {
-              clearInterval(subtitleInterval);
-              setIsSubtitleFinished(true);
-            }
-          }, 30); // velocidad del subtítulo
-        }
-      }, 40); // velocidad del título
-    }, 500);
-
-    return () => {
-      clearTimeout(startTimeout);
-    };
-  }, []);
-
-  // Refs for aligning the height of the two manifesto sections
-  const manifesto1Ref = React.useRef<HTMLDivElement>(null);
-  const manifesto2Ref = React.useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const adjustHeights = () => {
-      const el1 = manifesto1Ref.current;
-      const el2 = manifesto2Ref.current;
-      if (!el1 || !el2) return;
-
-      // Reset heights to auto to get the natural content height
-      el1.style.height = 'auto';
-      el2.style.height = 'auto';
-
-      if (window.innerWidth >= 1024) {
-        // We only align on desktop/large screens (lg breakpoint matches 1024px in Tailwind)
-        const height1 = el1.getBoundingClientRect().height;
-        const height2 = el2.getBoundingClientRect().height;
-        const maxHeight = Math.max(height1, height2);
-
-        el1.style.height = `${maxHeight}px`;
-        el2.style.height = `${maxHeight}px`;
-      }
-    };
-
-    // Run layout height adjustment
-    adjustHeights();
-
-    window.addEventListener('resize', adjustHeights);
-
-    // Check after content renders and fonts load to avoid race conditions
-    const timer = setTimeout(adjustHeights, 300);
-
-    return () => {
-      window.removeEventListener('resize', adjustHeights);
-      clearTimeout(timer);
-    };
-  }, []);
-
-  // Animaciones premium con GSAP y ScrollTrigger
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animación suave de la cuadrícula de perspectiva 3D del Hero
-      gsap.fromTo(".wireframe-grid",
-        { opacity: 0, transform: "rotateX(60deg) translateZ(-100px)" },
-        { opacity: 0.45, transform: "rotateX(60deg) translateZ(0px)", duration: 2.2, ease: "power2.out", delay: 0.4 }
-      );
-
-      // Desvanecimiento y zoom suave para la sección de Manifiesto 1 (Texto e Imagen)
-      gsap.fromTo(".manifesto-img",
-        { scale: 1.12, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1.4,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ".manifesto-1-section",
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-      gsap.fromTo(".manifesto-text",
-        { x: 40, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".manifesto-1-section",
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-      // Revelación escalonada de las tarjetas en Nuestra Propuesta
-      gsap.fromTo(".propuesta-card",
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: "#propuesta",
-            start: "top 78%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-      // Desvanecimiento y escala para la imagen de Nosotros (Manifiesto 2)
-      gsap.fromTo(".nosotros-img",
-        { scale: 1.12, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1.4,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: "#nosotros",
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-      // Deslizamiento desde la izquierda para Nosotros (Manifiesto 2)
-      gsap.fromTo(".nosotros-text",
-        { x: -60, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: "#nosotros",
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-      // Desvanecimiento y elevación en la sección de Servicios
-      gsap.fromTo(".servicios-header",
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: "#servicios",
-            start: "top 80%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-      gsap.fromTo(".servicios-carousel-container",
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: "#servicios",
-            start: "top 72%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-      // Animación en cascada de los campos del formulario de Contacto
-      gsap.fromTo(".contacto-header",
-        { y: 25, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: "#contacto",
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-      gsap.fromTo(".contacto-form-group",
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: "#contacto",
-            start: "top 80%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-    });
-
-    return () => ctx.revert();
-  }, []);
-
-
-  // Efecto para scroll activo (cambiar estilo de la cabecera en scroll)
   const [isScrolled, setIsScrolled] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+
+  // Form State
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', details: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleLeadSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const API_BASE = import.meta.env.VITE_API_ADMIN || 'http://localhost:3001/admin';
+      const response = await fetch(`${API_BASE}/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+      } else {
+        alert('Ocurrió un error al enviar tu mensaje. Intenta de nuevo.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error al conectar con el servidor.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Resetea el form al cerrar el modal
+  const handleCloseModal = () => {
+    setIsContactModalOpen(false);
+    setTimeout(() => {
+      setIsSuccess(false);
+      setFormData({ name: '', email: '', phone: '', details: '' });
+    }, 300); // Dar tiempo a la animación de cierre
+  };
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Manejo del formulario de contacto
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type } = e.target;
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
-      if (formErrors[name as keyof FormErrors]) {
-        setFormErrors(prev => ({ ...prev, [name]: undefined }));
-      }
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-      if (formErrors[name as keyof FormErrors]) {
-        setFormErrors(prev => ({ ...prev, [name]: undefined }));
-      }
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      setIsMobileMenuOpen(false);
     }
   };
-
-  const validateForm = (): boolean => {
-    const errors: FormErrors = {};
-    if (!formData.name.trim()) errors.name = 'El nombre es obligatorio.';
-    if (!formData.email.trim()) {
-      errors.email = 'El correo es obligatorio.';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'El correo electrónico no es válido.';
-    }
-    if (!formData.privacyAccepted) {
-      errors.privacyAccepted = 'Debes aceptar las políticas de privacidad y uso de datos.';
-    }
-
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleClearForm = () => {
-    setFormData({
-      name: '',
-      email: '',
-      company: '',
-      phone: '',
-      country: 'Perú',
-      message: '',
-      privacyAccepted: false
-    });
-    setFormErrors({});
-  };
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        company: '',
-        phone: '',
-        country: 'Perú',
-        message: '',
-        privacyAccepted: false
-      });
-      setTimeout(() => setIsSubmitSuccess(false), 5000);
-    }, 1500);
-  };
-
-
-
-
 
   return (
-    <div className="min-h-screen relative text-slate-100 selection:bg-woditek-electric selection:text-white overflow-x-hidden bg-[#02040a]">
+    <div className="min-h-screen bg-slate-50 font-heading text-slate-800">
 
-      {/* Luces y Nebulosas de fondo */}
-      <div className="absolute top-[8%] left-[-15%] ambient-glow animate-pulse-slow"></div>
-      <div className="absolute top-[35%] right-[-10%] ambient-glow opacity-80" style={{ animationDuration: '8s' }}></div>
-      <div className="absolute bottom-[18%] left-[5%] ambient-glow opacity-70 animate-pulse-slow"></div>
 
-      {/* Capas de Estrellas Parpadeantes */}
-      <div className="stars-container"></div>
-      <div className="stars-container-slow"></div>
-
-      {/* Cabecera / Navegación */}
-      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-100 ${isScrolled
-        ? 'bg-white border-b border-slate-200 py-4 shadow-md text-slate-800'
-        : 'bg-transparent border-b border-transparent py-4 text-white'
-        }`}>
-        <div className="w-full px-10 md:px-20 lg:px-24 flex items-center justify-between">
-          {/* Logo a la izquierda */}
-          <a href="#hero" className="focus:outline-none">
-            <Logo isScrolled={isScrolled} />
-          </a>
-
-          {/* Menú de Escritorio */}
-          <div className="hidden md:flex items-center gap-8">
-            <nav className="flex items-center gap-8 text-base font-medium tracking-wide">
-              <a href="#hero" className={`transition-colors duration-50 font-light ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Home</a>
-              <a href="#nosotros" className={`transition-colors duration-50 font-light ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Nosotros</a>
-              <a href="#propuesta" className={`transition-colors duration-50 font-light ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Propuesta</a>
-              <a href="#servicios" className={`transition-colors duration-50 font-light ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Servicios</a>
-              <a href="#contacto" className={`transition-colors duration-50 font-light ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Contacto</a>
-            </nav>
+      {/* Main Navigation */}
+      <nav className={`fixed w-full z-40 transition-all duration-500 ease-in-out bg-transparent py-5 px-4 md:px-8 lg:px-16 ${isScrolled ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}>
+        <div className="w-full grid grid-cols-3 items-center">
+          {/* Left: Menu Toggle */}
+          <div className="flex justify-start items-center">
+            <button
+              className="text-white flex items-center space-x-1 sm:space-x-2 hover:text-blue-400 transition-colors"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <Menu className="w-6 h-6 sm:w-7 sm:h-7" />
+              <span className="hidden sm:inline font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-sm tracking-widest">Menú</span>
+            </button>
           </div>
 
-          {/* Botón Menú Móvil */}
-          <div className="flex items-center gap-4 md:hidden">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`p-1 transition-colors duration-200 ${isScrolled ? 'text-slate-800 hover:text-woditek-electric' : 'text-white hover:text-woditek-blueBrilliant'}`}
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          {/* Center: Logo */}
+          <div className="flex justify-center items-center cursor-pointer" onClick={() => scrollTo('home')}>
+            <Logo className="scale-75 sm:scale-100" isScrolled={false} />
+          </div>
+
+          {/* Right: Contact Button */}
+          <div className="flex justify-end items-center">
+            <button onClick={() => setIsContactModalOpen(true)} className="hidden sm:inline-flex bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#0c121f] px-6 py-2 text-sm font-heading font-black uppercase [font-variation-settings:'wdth'_125] transition-colors whitespace-nowrap">
+              Contáctanos
             </button>
           </div>
         </div>
+      </nav>
 
-        {/* Menú Desplegable Móvil */}
-        <div className={`md:hidden fixed inset-x-0 top-[73px] transition-all duration-300 overflow-hidden ${isScrolled
-          ? 'bg-white/95 border-b border-slate-200 text-slate-800'
-          : 'bg-woditek-dark/95 border-b border-woditek-electric/20 text-slate-100'
-          } ${isMobileMenuOpen ? 'max-h-[340px] opacity-100' : 'max-h-0 opacity-0'
-          }`}>
-          <div className="px-6 py-6 flex flex-col gap-5 text-base tracking-wide font-medium">
-            <a href="#hero" onClick={() => setIsMobileMenuOpen(false)} className={`transition-colors duration-200 ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Home</a>
-            <a href="#nosotros" onClick={() => setIsMobileMenuOpen(false)} className={`transition-colors duration-200 ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Nosotros</a>
-            <a href="#propuesta" onClick={() => setIsMobileMenuOpen(false)} className={`transition-colors duration-200 ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Propuesta</a>
-            <a href="#servicios" onClick={() => setIsMobileMenuOpen(false)} className={`transition-colors duration-200 ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Servicios</a>
-            <a href="#contacto" onClick={() => setIsMobileMenuOpen(false)} className={`transition-colors duration-200 ${isScrolled ? 'hover:text-woditek-electric' : 'hover:text-woditek-blueBrilliant'}`}>Contacto</a>
-            <a
-              href="#contacto"
+      {/* Full Screen Menu Overlay */}
+      <div className={`fixed inset-0 bg-blue-600 z-50 flex flex-col text-white overflow-y-auto transition-opacity duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        {/* Top Bar inside Overlay */}
+        <div className="w-full grid grid-cols-3 items-center py-5 px-4 md:px-8 lg:px-16 shrink-0">
+          <div className="flex justify-start">
+            <button
+              className="flex items-center space-x-2 hover:text-blue-200 transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="w-full text-center py-2.5 bg-[#3162fa] hover:bg-blue-700 rounded-lg text-sm font-semibold tracking-wider text-white transition-colors duration-200"
             >
-              INICIAR PROYECTO
-            </a>
+              <X className="w-6 h-6" />
+              <span className="hidden sm:inline font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-sm tracking-widest">Cerrar</span>
+            </button>
+          </div>
+          <div className="flex justify-center cursor-pointer" onClick={() => scrollTo('home')}>
+            {/* White Logo on Blue Background */}
+            <Logo isScrolled={false} />
+          </div>
+          <div className="flex justify-end">
+            {/* Empty to preserve grid centering */}
           </div>
         </div>
-      </header>
 
-      <section
-        id="hero"
-        className="relative min-h-screen flex flex-col justify-center pt-28 overflow-hidden"
-        style={{
-          backgroundImage: `url(${heroBg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      >
-        {/* Gradiente izquierdo para asegurar la legibilidad */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#02040a]/95 via-[#02040a]/65 to-transparent z-0 pointer-events-none"></div>
+        {/* Menu Content */}
+        <div className={`flex-grow flex flex-col justify-center items-center w-full px-4 md:px-8 lg:px-16 py-12 md:py-20 transition-all duration-700 delay-200 ease-out transform ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+          {/* Navigation Links */}
+          <div className="w-full md:w-auto flex flex-col items-center space-y-4 md:space-y-6">
+            <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('home'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Inicio</button>
+            <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('why-choose-us'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Beneficios</button>
+            <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('services'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Servicios</button>
+            <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('how-we-work'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Proceso</button>
+            <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('adaptability'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Adaptabilidad</button>
+            <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('testimonials'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Testimonios</button>
+            <div className="pt-6 w-full flex justify-center">
+              <button onClick={() => { setIsMobileMenuOpen(false); setIsContactModalOpen(true); }} className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 sm:px-10 sm:py-4 font-heading text-xl sm:text-2xl md:text-3xl font-black uppercase [font-variation-settings:'wdth'_125] transition-colors rounded-sm shadow-sm w-full sm:w-auto">
+                Contáctanos
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        {/* Luz difusa central */}
-        <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-[#0047FF]/10 blur-[100px] pointer-events-none z-0"></div>
+      {/* Hero Section */}
+      <section id="home" className="relative min-h-screen flex items-center pt-24 overflow-hidden bg-[#0c121f]">
+        <div className="absolute inset-0 z-0">
+          <img src="/ChatGPT Image 18 sept 2026, 11_30_18.png" alt="Business IT Solutions Desktop" className="hidden md:block w-full h-full object-cover object-right" />
+          <img src="/Gemini_Generated_Image_a1af2ka1af2ka1af.jpg" alt="Business IT Solutions Mobile" className="block md:hidden w-full h-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0c121f] via-[#0c121f]/90 to-transparent md:bg-gradient-to-r md:from-[#0c121f] md:via-[#0c121f]/90 md:to-transparent bg-gradient-to-t from-[#0c121f] via-[#0c121f]/80 to-transparent"></div>
+        </div>
 
-        <div className="w-full px-10 md:px-20 lg:px-24 relative z-10 flex flex-col items-start mt-6">
-          <div className="max-w-5xl w-full text-left flex flex-col items-start justify-center">
-            {/* Título con efecto Typewriter */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-sans font-bold text-white mb-6 leading-tight max-w-4xl text-left uppercase">
-              <span>{typedTitle}</span>
-              {!isTitleFinished && (
-                <span className="inline-block w-[3px] md:w-[5px] h-[0.85em] ml-1.5 bg-[#00d1ff] align-middle animate-pulse shadow-[0_0_8px_rgba(0,209,255,0.8)]"></span>
-              )}
-              <span className="opacity-0">{"TRANSFORMA TU IDEA EN SOFTWARE INTELIGENTE".substring(typedTitle.length)}</span>
+        <div className="w-full px-4 md:px-8 lg:px-16 relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left mt-10 md:mt-0">
+          <div className="max-w-2xl flex flex-col items-center sm:items-start w-full">
+            <FadeIn delay={100} duration={1000}>
+            <h1 className="font-heading text-3xl sm:text-4xl md:text-6xl lg:text-[5.5rem] font-black uppercase leading-[0.9] [font-variation-settings:'wdth'_125] mb-6 sm:mb-8 text-white w-full tracking-tight">
+              Transformamos tus ideas en<br />
+              <span className="text-blue-400">software</span>
             </h1>
+            <div className="flex flex-col sm:flex-row justify-center sm:justify-start space-y-4 sm:space-y-0 sm:space-x-4 w-full">
+              <button onClick={() => scrollTo('services')} className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#0c121f] px-10 py-4 font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-lg transition-colors flex items-center justify-center shadow-sm w-full sm:w-auto">
+                Saber más
+              </button>
+              <button onClick={() => setIsContactModalOpen(true)} className="sm:hidden bg-blue-600 border-2 border-blue-600 text-white hover:bg-blue-700 px-10 py-4 font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-lg transition-colors flex items-center justify-center shadow-sm w-full">
+                Contáctanos
+              </button>
+            </div>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
 
-            {/* Subtítulo con efecto Typewriter */}
-            <p className="text-xl md:text-2xl text-white max-w-2xl mb-10 leading-relaxed font-light text-left">
-              <span>{typedSubtitle}</span>
-              {isTitleFinished && !isSubtitleFinished && (
-                <span className="inline-block w-[2px] md:w-[3px] h-[0.85em] ml-1 bg-[#3162fa] align-middle animate-pulse shadow-[0_0_6px_rgba(49,98,250,0.8)]"></span>
-              )}
-              <span className="opacity-0">{"Productividad, Control y Crecimiento".substring(typedSubtitle.length)}</span>
-            </p>
+      {/* Services Section */}
+      <section id="services" className="py-24 bg-slate-50 relative">
+        <div className="w-full px-4 md:px-8 lg:px-16">
+          <FadeIn><div className="text-center mb-20">
+            <p className="font-serif italic text-xl text-blue-600 mb-4">Lo que hacemos</p>
+            <h2 className="font-heading text-4xl md:text-5xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-6">Nuestros Servicios</h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">Soluciones digitales diseñadas para las necesidades de tu negocio.</p>
+          </div></FadeIn>
 
-            {/* Botón de Acción con Fade In suave */}
-            <div className={`transition-all duration-1000 ease-out transform ${isSubtitleFinished ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-              }`}>
-              <a
-                href="#contacto"
-                className="flex items-center justify-center gap-2 px-8 py-3.5 bg-[#3162fa] rounded-lg text-sm font-medium tracking-wide text-white hover:bg-[#1a4cd6] transition-colors duration-300"
-              >
-                <span>CONTACTANOS</span>
-              </a>
+          <FadeIn delay={200}><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+            {/* Card 1: Software a medida */}
+            <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
+              <div className="w-full h-56 overflow-hidden relative shrink-0">
+                <img src="/service_software.jpg" alt="Software a medida" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              </div>
+              <div className="p-8 md:p-10 flex flex-col flex-grow">
+                <h3 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-4">Software a medida</h3>
+                <p className="text-slate-600 mb-8 font-medium">Sistemas diseñados específicamente para tu negocio.</p>
+                <p className="text-sm text-slate-500 mb-6">Creamos sistemas web personalizados desde cero, adaptados a los procesos y necesidades específicas de cada empresa.</p>
+                <ul className="space-y-3 mt-auto">
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> ERP y módulos empresariales</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> CRM y Sistemas de ventas</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Gestión de inventarios</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Card 2: Desarrollo Web */}
+            <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
+              <div className="w-full h-56 overflow-hidden relative shrink-0">
+                <img src="/service_web.jpg" alt="Desarrollo Web" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              </div>
+              <div className="p-8 md:p-10 flex flex-col flex-grow">
+                <h3 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-4">Desarrollo web</h3>
+                <p className="text-slate-600 mb-8 font-medium">Sitios web modernos que representan tu marca.</p>
+                <p className="text-sm text-slate-500 mb-6">Diseñamos sitios rápidos y adaptados a dispositivos móviles para fortalecer la presencia digital de tu empresa.</p>
+                <ul className="space-y-3 mt-auto">
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Landing pages</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Catálogos digitales</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Sitios web empresariales</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Card 3: Automatización */}
+            <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
+              <div className="w-full h-56 overflow-hidden relative shrink-0">
+                <img src="/service_automation.jpg" alt="Automatización" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              </div>
+              <div className="p-8 md:p-10 flex flex-col flex-grow">
+                <h3 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-4">Automatización</h3>
+                <p className="text-slate-600 mb-8 font-medium">Menos tareas manuales, más eficiencia.</p>
+                <p className="text-sm text-slate-500 mb-6">Convertimos tareas repetitivas en procesos digitales para reducir trabajo manual.</p>
+                <ul className="space-y-3 mt-auto">
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Flujos de aprobación</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Notificaciones y alertas</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Generación de reportes</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Card 4: IA */}
+            <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
+              <div className="w-full h-56 overflow-hidden relative shrink-0">
+                <img src="/service_ai.jpg" alt="Inteligencia Artificial" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              </div>
+              <div className="p-8 md:p-10 flex flex-col flex-grow">
+                <h3 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-4">Inteligencia Artificial</h3>
+                <p className="text-slate-600 mb-8 font-medium">IA aplicada a procesos reales de negocio.</p>
+                <p className="text-sm text-slate-500 mb-6">Integramos herramientas de IA en los procesos de tu empresa para mejorar la atención, análisis y automatización.</p>
+                <ul className="space-y-3 mt-auto">
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Chatbots empresariales</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Análisis de información</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Asistentes virtuales</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Card 5: Integraciones */}
+            <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
+              <div className="w-full h-56 overflow-hidden relative shrink-0">
+                <img src="/service_integration.jpg" alt="Integraciones" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              </div>
+              <div className="p-8 md:p-10 flex flex-col flex-grow">
+                <h3 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-4">Integraciones</h3>
+                <p className="text-slate-600 mb-8 font-medium">Conectamos tus sistemas y herramientas.</p>
+                <p className="text-sm text-slate-500 mb-6">Hacemos que la información fluya automáticamente entre diferentes plataformas y bases de datos.</p>
+                <ul className="space-y-3 mt-auto">
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> APIs REST</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Sistemas de pago</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Integración con WhatsApp</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Card 6: Dashboards */}
+            <div className="bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col h-full relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 z-10"></div>
+              <div className="w-full h-56 overflow-hidden relative shrink-0">
+                <img src="/service_dashboard.jpg" alt="Dashboards" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              </div>
+              <div className="p-8 md:p-10 flex flex-col flex-grow">
+                <h3 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-4">Dashboards</h3>
+                <p className="text-slate-600 mb-8 font-medium">Convierte tus datos en decisiones.</p>
+                <p className="text-sm text-slate-500 mb-6">Transformamos los datos de tu negocio en información visual para facilitar el seguimiento de indicadores.</p>
+                <ul className="space-y-3 mt-auto">
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> KPIs e Indicadores</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Gráficos interactivos</li>
+                  <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Paneles administrativos</li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+          </FadeIn>
 
-        {/* 3D Perspective Grid */}
-        <div className="perspective-container">
-          <div className="wireframe-grid"></div>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[120px] bg-gradient-to-t from-woditek-electric/10 to-transparent blur-xl pointer-events-none"></div>
-        </div>
-      </section>
-
-      {/* Sección de Propuesta de Valor / Manifiesto */}
-      <section className="relative z-10 bg-white overflow-hidden manifesto-1-section">
-        <div ref={manifesto1Ref} className="grid grid-cols-1 lg:grid-cols-12 items-stretch w-full">
-          {/* Imagen a la izquierda (pegada a los bordes izquierdo, superior e inferior) */}
-          <div className="lg:col-span-5 relative w-full h-[240px] lg:h-auto overflow-hidden lg:order-1 order-2">
-            <img
-              src={imgProgramacion}
-              alt="Programación Woditek"
-              className="absolute inset-0 w-full h-full object-cover manifesto-img"
-            />
-            {/* Degradado solo al lado derecho (blanco) hacia la izquierda (transparente) para integrarse con la sección */}
-            <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white via-white/30 to-transparent pointer-events-none z-10"></div>
-          </div>
-
-          {/* Texto a la derecha (alineado en tamaños y padding con la sección Nosotros) */}
-          <div className="lg:col-span-7 w-full text-left py-20 px-10 md:px-20 lg:pl-16 lg:pr-24 lg:order-2 order-1 flex flex-col justify-center manifesto-text">
-            <TypewriterTitle
-              text="No vendemos horas de código, entregamos soluciones de negocio"
-              className="text-3xl md:text-5xl lg:text-6xl font-sans font-extrabold tracking-tight text-slate-950 mb-6 leading-[1.1] uppercase"
-              cursorColor="#3162fa"
-            />
-            <p className="text-xl md:text-2xl text-slate-800 max-w-2xl mb-10 leading-relaxed font-light text-left">
-              Reducimos la incertidumbre, eliminamos la fricción y aceleramos el retorno de inversión mediante software a la medida.
-            </p>
+          {/* CTA Section */}
+          <div className="bg-[#0c121f] text-white p-12 md:p-16 text-center max-w-4xl mx-auto border-t-4 border-blue-600 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+            <h3 className="font-heading text-3xl md:text-4xl font-black uppercase [font-variation-settings:'wdth'_125] mb-6 relative z-10">¿Tienes un proceso que quieres digitalizar?</h3>
+            <p className="text-lg text-slate-300 mb-10 max-w-2xl mx-auto relative z-10">Cuéntanos qué necesitas y diseñamos una solución para tu negocio.</p>
+            <button onClick={() => setIsContactModalOpen(true)} className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#0c121f] px-10 py-4 font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-lg transition-colors inline-flex items-center justify-center shadow-sm relative z-10">
+              Hablemos de tu proyecto <ArrowRight className="ml-3 w-5 h-5" />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Sección de Nuestra Propuesta */}
-      <section
-        id="propuesta"
-        className="py-24 relative z-10 px-6 bg-[#02040a] border-b border-slate-900"
-      >
-        {/* Arco de iluminación superior personalizado (Difuminado) */}
-        <div className="absolute inset-x-0 top-0 h-[480px] md:h-[580px] overflow-hidden pointer-events-none z-0 select-none">
-          {/* Capa 1: Resplandor ambiental azul profundo */}
-          <svg
-            className="absolute top-0 left-0 w-full h-full opacity-45 blur-[120px]"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <linearGradient id="propuestaBaseGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#3162fa" stopOpacity="0.8" />
-                <stop offset="60%" stopColor="#3162fa" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#3162fa" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <path d="M 0,0 Q 50,200 100,0 Z" fill="url(#propuestaBaseGlow)" />
-          </svg>
 
-          {/* Capa 2: Resplandor central celeste/cyan intenso */}
-          <svg
-            className="absolute top-0 left-0 w-full h-[85%] opacity-55 blur-[85px]"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <linearGradient id="propuestaCoreGlow" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#00d1ff" stopOpacity="0.9" />
-                <stop offset="50%" stopColor="#3162fa" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#3162fa" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <path d="M 0,0 Q 50,200 100,0 Z" fill="url(#propuestaCoreGlow)" />
-          </svg>
-        </div>
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          {/* Cabecera de la sección */}
+      {/* 3. ¿Por qué elegir Woditek? */}
+      <section id="why-choose-us" className="py-24 bg-white">
+        <div className="w-full px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <TypewriterTitle
-              text="Por qué elegir software a medida con Woditek"
-              className="text-3xl md:text-5xl lg:text-6xl font-sans font-extrabold tracking-tight text-white mb-6 leading-[1.1] uppercase"
-              cursorColor="#00d1ff"
-            />
-            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed font-light text-center md:mx-auto font-sans">
-              Creamos soluciones de software de alto impacto alineadas con la visión de tu negocio, con total transparencia, control and altos estándares de ingeniería.
-            </p>
+            <p className="font-serif italic text-xl text-blue-600 mb-4">Beneficios</p>
+            <h2 className="font-heading text-4xl md:text-5xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900">¿Por qué elegir Woditek?</h2>
           </div>
 
-          {/* Grid de 4 pilares */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Pilar 1: Propiedad Absoluta */}
-            <div className="bg-[#0a0e1a]/60 border border-slate-800/80 p-8 rounded-2xl hover:border-[#3162fa]/30 transition-all duration-300 hover:shadow-[0_0_25px_rgba(49,98,250,0.1)] hover:-translate-y-1 group propuesta-card">
-              <div className="w-12 h-12 rounded-xl bg-[#3162fa]/10 flex items-center justify-center text-[#3162fa] mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Key size={24} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            <div className="flex flex-col items-start p-8 bg-slate-50 border border-slate-100 hover:shadow-lg transition-shadow group">
+              <div className="w-14 h-14 bg-blue-100 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Settings className="w-7 h-7" />
               </div>
-              <h3 className="text-lg font-sans font-semibold text-white mb-3 tracking-wide">
-                Propiedad Absoluta
-              </h3>
-              <p className="text-slate-400 text-sm leading-relaxed font-sans font-light">
-                Eres dueño 100% de tu software. Cero costos de licenciamiento obligatorio por usuario y sin dependencias tecnológicas o de terceros.
-              </p>
+              <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-3">Soluciones a medida</h4>
+              <p className="text-slate-600 leading-relaxed">No adaptamos tu negocio a un software genérico. Creamos sistemas que se ajustan perfectamente a tu forma de trabajar.</p>
+            </div>
+            
+            <div className="flex flex-col items-start p-8 bg-slate-50 border border-slate-100 hover:shadow-lg transition-shadow group">
+              <div className="w-14 h-14 bg-blue-100 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Layout className="w-7 h-7" />
+              </div>
+              <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-3">Diseño intuitivo</h4>
+              <p className="text-slate-600 leading-relaxed">Sistemas fáciles de utilizar para tu equipo. Minimizamos la curva de aprendizaje con interfaces claras y modernas.</p>
             </div>
 
-            {/* Pilar 2: Diseño Adaptado */}
-            <div className="bg-[#0a0e1a]/60 border border-slate-800/80 p-8 rounded-2xl hover:border-[#3162fa]/30 transition-all duration-300 hover:shadow-[0_0_25px_rgba(49,98,250,0.1)] hover:-translate-y-1 group propuesta-card">
-              <div className="w-12 h-12 rounded-xl bg-[#3162fa]/10 flex items-center justify-center text-[#3162fa] mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Cpu size={24} />
+            <div className="flex flex-col items-start p-8 bg-slate-50 border border-slate-100 hover:shadow-lg transition-shadow group">
+              <div className="w-14 h-14 bg-blue-100 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Maximize className="w-7 h-7" />
               </div>
-              <h3 className="text-lg font-sans font-semibold text-white mb-3 tracking-wide">
-                Diseño Adaptado
-              </h3>
-              <p className="text-slate-400 text-sm leading-relaxed font-sans font-light">
-                Tu software se adapta a tus flujos y procesos empresariales, no al revés. Optimizamos y automatizamos tareas críticas para tu productividad.
-              </p>
+              <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-3">Escalable</h4>
+              <p className="text-slate-600 leading-relaxed">Tu sistema puede crecer junto con tu empresa. Diseñamos bases sólidas listas para integrar nuevas funcionalidades en el futuro.</p>
             </div>
 
-            {/* Pilar 3: Escalabilidad y Seguridad */}
-            <div className="bg-[#0a0e1a]/60 border border-slate-800/80 p-8 rounded-2xl hover:border-[#3162fa]/30 transition-all duration-300 hover:shadow-[0_0_25px_rgba(49,98,250,0.1)] hover:-translate-y-1 group propuesta-card">
-              <div className="w-12 h-12 rounded-xl bg-[#3162fa]/10 flex items-center justify-center text-[#3162fa] mb-6 group-hover:scale-110 transition-transform duration-300">
-                <ShieldCheck size={24} />
+            <div className="flex flex-col items-start p-8 bg-slate-50 border border-slate-100 hover:shadow-lg transition-shadow group">
+              <div className="w-14 h-14 bg-blue-100 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Cpu className="w-7 h-7" />
               </div>
-              <h3 className="text-lg font-sans font-semibold text-white mb-3 tracking-wide">
-                Seguridad y Escalabilidad
-              </h3>
-              <p className="text-slate-400 text-sm leading-relaxed font-sans font-light">
-                Arquitectura moderna y código limpio diseñado bajo estrictos estándares de ciberseguridad, preparado para soportar el crecimiento de tu negocio.
-              </p>
-            </div>
-
-            {/* Pilar 4: Soporte y Evolución */}
-            <div className="bg-[#0a0e1a]/60 border border-slate-800/80 p-8 rounded-2xl hover:border-[#3162fa]/30 transition-all duration-300 hover:shadow-[0_0_25px_rgba(49,98,250,0.1)] hover:-translate-y-1 group propuesta-card">
-              <div className="w-12 h-12 rounded-xl bg-[#3162fa]/10 flex items-center justify-center text-[#3162fa] mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Activity size={24} />
-              </div>
-              <h3 className="text-lg font-sans font-semibold text-white mb-3 tracking-wide">
-                Soporte y Evolución
-              </h3>
-              <p className="text-slate-400 text-sm leading-relaxed font-sans font-light">
-                Soporte continuo y mantenimiento evolutivo garantizados. Tu plataforma evoluciona al mismo ritmo que lo hacen las demandas de tu mercado.
-              </p>
+              <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-3">Tecnología moderna</h4>
+              <p className="text-slate-600 leading-relaxed">Utilizamos herramientas actuales para desarrollar soluciones eficientes, seguras y de alto rendimiento.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Sección de Propuesta de Valor / Nosotros */}
-      <section id="nosotros" className="relative z-10 bg-white overflow-hidden manifesto-2-section border-b border-slate-200">
-        <div ref={manifesto2Ref} className="grid grid-cols-1 lg:grid-cols-12 items-stretch w-full">
-          {/* Texto a la izquierda */}
-          <div className="lg:col-span-7 w-full text-left py-20 px-10 md:px-20 lg:pl-24 lg:pr-16 lg:order-1 order-1 flex flex-col justify-center nosotros-text">
-            <TypewriterTitle
-              text="Transformamos flujos complejos en sistemas simples."
-              className="text-3xl md:text-5xl lg:text-6xl font-sans font-extrabold tracking-tight text-slate-950 mb-6 leading-[1.1] uppercase"
-              cursorColor="#3162fa"
-            />
-            <p className="text-xl md:text-2xl text-slate-800 max-w-2xl mb-10 leading-relaxed font-light text-left">
-              Desarrollamos soluciones a medida que mitigan fallas, aceleran procesos y escalan al ritmo de tu negocio.
-            </p>
-          </div>
+      {/* 4. Nuestro proceso */}
+      <section id="how-we-work" className="py-24 bg-[#0c121f] text-white relative overflow-hidden">
+        <div className="w-full px-4 md:px-8 lg:px-16 max-w-7xl mx-auto relative z-10">
+          <FadeIn><div className="text-center mb-20">
+            <p className="font-serif italic text-xl text-blue-400 mb-4">Cómo trabajamos</p>
+            <h2 className="font-heading text-4xl md:text-5xl font-black uppercase [font-variation-settings:'wdth'_125]">Nuestro proceso</h2>
+          </div></FadeIn>
 
-          {/* Imagen a la derecha */}
-          <div className="lg:col-span-5 relative w-full h-[240px] lg:h-auto overflow-hidden lg:order-2 order-2">
-            <img
-              src={imgFlujo}
-              alt="Flujo de Desarrollo Woditek"
-              className="absolute inset-0 w-full h-full object-cover nosotros-img"
-            />
-            {/* Degradado solo al lado izquierdo (blanco) hacia la derecha (transparente) */}
-            <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white via-white/30 to-transparent pointer-events-none z-10"></div>
+          <FadeIn delay={200}><div className="relative">
+            {/* Line connector for desktop */}
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-800 -translate-y-1/2 z-0"></div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-6 relative z-10">
+              {/* Step 1 */}
+              <div className="flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center text-3xl font-black mb-6 shadow-[0_0_30px_rgba(37,99,235,0.3)]">01</div>
+                <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] mb-3">Analizamos</h4>
+                <p className="text-slate-400">Entendemos tu negocio, necesidades y procesos actuales.</p>
+              </div>
+              
+              {/* Step 2 */}
+              <div className="flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-slate-800 border-2 border-slate-700 rounded-full flex items-center justify-center text-3xl font-black mb-6">02</div>
+                <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] mb-3">Diseñamos</h4>
+                <p className="text-slate-400">Definimos la solución y diseñamos la experiencia del sistema.</p>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-slate-800 border-2 border-slate-700 rounded-full flex items-center justify-center text-3xl font-black mb-6">03</div>
+                <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] mb-3">Desarrollamos</h4>
+                <p className="text-slate-400">Construimos y probamos el software con altos estándares.</p>
+              </div>
+
+              {/* Step 4 */}
+              <div className="flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-slate-800 border-2 border-slate-700 rounded-full flex items-center justify-center text-3xl font-black mb-6">04</div>
+                <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] mb-3">Implementamos</h4>
+                <p className="text-slate-400">Ponemos el sistema en funcionamiento y brindamos soporte.</p>
+              </div>
+            </div>
           </div>
+          </FadeIn>
         </div>
       </section>
 
-      {/* Sección de Servicios / Capacidades */}
-      <section
-        id="servicios"
-        className="py-24 relative z-10 px-6 bg-[#f8fafd]"
-      >
-        <div className="max-w-6xl mx-auto">
-          {/* Cabecera de sección */}
-          <div className="text-center mb-16 servicios-header">
-            <TypewriterTitle
-              text="Nuestros Servicios"
-              className="text-3xl md:text-5xl lg:text-6xl font-sans font-extrabold tracking-tight text-slate-950 mb-6 leading-[1.1] uppercase"
-              cursorColor="#3162fa"
-            />
-            <p className="text-xl md:text-2xl text-slate-800 max-w-2xl mb-10 leading-relaxed font-light text-center md:mx-auto">
-              Diseñamos soluciones tecnológicas a medida con un enfoque de ingeniería moderno y arquitectura robusta para impulsar tu negocio.
-            </p>
+      {/* 5. Soluciones para diferentes negocios */}
+      <section id="adaptability" className="py-24 bg-slate-50 relative">
+        <div className="w-full px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="font-serif italic text-xl text-blue-600 mb-4">Adaptabilidad</p>
+            <h2 className="font-heading text-4xl md:text-5xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-6">Soluciones para diferentes negocios</h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">"Podrían desarrollar algo así para mi negocio." - Sí, podemos.</p>
           </div>
 
-          {/* Contenedor relativo del carrusel */}
-          <div className="relative w-full px-4 md:px-0 servicios-carousel-container select-none">
-            {/* Control de navegación izquierdo */}
-            <button
-              onClick={handlePrevClick}
-              className="group absolute left-0 top-1/2 -translate-y-1/2 translate-x-2 md:-translate-x-12 lg:-translate-x-20 z-20 w-12 h-12 rounded-full bg-slate-900/60 backdrop-blur-md border border-slate-800 hover:border-[#3162fa]/50 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300 shadow-md hover:shadow-[0_0_15px_rgba(49,98,250,0.3)] hover:scale-105"
-              aria-label="Ver servicios anteriores"
-            >
-              <ChevronLeft size={22} className="transition-transform duration-300 group-hover:-translate-x-1" />
-            </button>
-
-            {isMobile ? (
-              /* Carrusel Desplazable (Mobile Fallback) */
-              <div
-                ref={servicesCarouselRef}
-                className="flex gap-8 overflow-x-auto scrollbar-none snap-x snap-mandatory scroll-smooth pb-8"
-              >
-                {services.map((service, idx) => (
-                  <div key={idx} className="flex-none w-[290px] sm:w-[320px] snap-center snap-always">
-                    <div className="bg-white border border-slate-200 rounded-2xl flex flex-col justify-between min-h-[480px] h-full shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-300/80 overflow-hidden">
-                      <div className="w-full">
-                        <div className="w-full aspect-video overflow-hidden bg-slate-50 border-b border-slate-100">
-                          <img
-                            src={service.image}
-                            alt={service.title}
-                            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                          />
-                        </div>
-                        <div className="p-6 text-center">
-                          <h3 className="text-xl font-sans font-light text-slate-900 mb-3 tracking-wide">
-                            {service.title}
-                          </h3>
-                          <p className="text-slate-500 text-sm leading-relaxed font-sans font-light">
-                            {service.description}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              /* Escena Cóncava 3D Real (Tablet & Desktop) - Estilo Anfiteatro */
-              <div
-                className="carousel-3d-scene"
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onPointerCancel={handlePointerUp}
-              >
-                <div className="carousel-3d-container">
-                  {services.map((service, idx) => {
-                    const currentPosition = rotationIndex - dragOffsetIndex;
-
-                    let offset = idx - currentPosition;
-                    // Bucle infinito: mantener el offset en el rango [-2.5, 2.5]
-                    offset = ((offset + 2.5) % 5);
-                    if (offset < 0) offset += 5;
-                    offset -= 2.5;
-
-                    const absOffset = Math.abs(offset);
-                    const isActive = absOffset < 0.5;
-
-                    const tx = offset * spacing;
-                    const rotY = -offset * 15; // Rotación hacia adentro (cóncava)
-                    const tz = absOffset * zStep; // Los extremos avanzan en Z (hacia el usuario)
-
-                    const cardStyle = {
-                      transform: `translateX(${tx}px) rotateY(${rotY}deg) translateZ(${tz}px)`,
-                      opacity: absOffset > 2.0 ? 0 : (absOffset > 1.5 ? (2.0 - absOffset) * 2 : 1),
-                      filter: 'none',
-                      cursor: isActive ? 'default' : 'pointer',
-                      zIndex: isActive ? 10 : (absOffset > 1.5 ? 2 : 5),
-                      transition: isDragging ? 'none' : 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s, filter 0.6s',
-                    } as React.CSSProperties;
-
-                    return (
-                      <div
-                        key={idx}
-                        className={`carousel-3d-card rounded-2xl transition-all duration-300 ${isActive
-                            ? 'shadow-[0_15px_35px_rgba(49,98,250,0.15)] scale-[1.03]'
-                            : 'scale-95'
-                          }`}
-                        style={cardStyle}
-                        onClick={() => handleCardClick(idx)}
-                      >
-                        <div className="bg-white border border-slate-200/80 rounded-2xl flex flex-col justify-between min-h-[480px] h-full shadow-sm overflow-hidden select-none">
-                          <div className="w-full pointer-events-none">
-                            <div className="w-full aspect-video overflow-hidden bg-slate-50 border-b border-slate-100">
-                              <img
-                                src={service.image}
-                                alt={service.title}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            <div className="p-6 text-center">
-                              <h3 className="text-xl font-sans font-light text-slate-900 mb-3 tracking-wide">
-                                {service.title}
-                              </h3>
-                              <p className="text-slate-500 text-sm leading-relaxed font-sans font-light">
-                                {service.description}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+          <FadeIn delay={200}><div className="flex flex-wrap justify-center gap-6">
+              <div className="bg-white p-8 border-l-4 border-blue-600 shadow-sm hover:shadow-xl transition-all w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+                <div className="flex items-center mb-4">
+                  <Utensils className="w-6 h-6 text-blue-600 mr-3" />
+                  <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900">Restaurantes</h4>
                 </div>
+                <p className="text-slate-600 font-medium">Pedidos, mesas, cocina, inventario y caja.</p>
               </div>
-            )}
-
-            {/* Control de navegación derecho */}
-            <button
-              onClick={handleNextClick}
-              className="group absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 md:translate-x-12 lg:translate-x-20 z-20 w-12 h-12 rounded-full bg-slate-900/60 backdrop-blur-md border border-slate-800 hover:border-[#3162fa]/50 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300 shadow-md hover:shadow-[0_0_15px_rgba(49,98,250,0.3)] hover:scale-105"
-              aria-label="Ver siguientes servicios"
-            >
-              <ChevronRight size={22} className="transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-
-
-      {/* 5. Contacto */}
-      <section
-        id="contacto"
-        className="py-24 relative z-10 px-6 bg-[#f8fafd] text-slate-800 border-t border-slate-200"
-      >
-        {/* Soft light blue ambient glow in background */}
-        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-sky-200/20 blur-[120px] pointer-events-none z-0"></div>
-
-        <div className="max-w-4xl mx-auto relative z-10 text-left">
-          {/* Cabecera del Contacto */}
-          <div className="mb-10 contacto-header">
-            <TypewriterTitle
-              text="Contáctanos"
-              className="text-3xl md:text-5xl font-sans font-extrabold tracking-tight text-[#3162fa] uppercase mb-3"
-              cursorColor="#3162fa"
-            />
-            <p className="text-slate-500 text-sm md:text-base font-light">
-              Déjanos un mensaje y un especialista de nuestro equipo se pondrá en contacto contigo a la brevedad.
-            </p>
-          </div>
-
-          {isSubmitSuccess ? (
-            <div className="text-center py-16 bg-white/60 backdrop-blur-md rounded-2xl border border-slate-200/80 shadow-sm max-w-xl mx-auto p-8">
-              <div className="w-16 h-16 bg-[#3162fa]/10 border border-[#3162fa]/35 rounded-full flex items-center justify-center mx-auto mb-6 text-[#3162fa] animate-bounce">
-                <CheckCircle size={32} />
+  
+              <div className="bg-white p-8 border-l-4 border-blue-600 shadow-sm hover:shadow-xl transition-all w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+                <div className="flex items-center mb-4">
+                  <Scissors className="w-6 h-6 text-blue-600 mr-3" />
+                  <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900">Barberías</h4>
+                </div>
+                <p className="text-slate-600 font-medium">Clientes, citas, servicios, trabajadores y caja.</p>
               </div>
-              <h3 className="text-2xl font-bold text-slate-950 mb-3">¡Mensaje Recibido!</h3>
-              <p className="text-slate-600 text-base font-light">
-                Gracias por ponerte en contacto. Nos comunicaremos contigo en las próximas horas para coordinar una sesión estratégica.
-              </p>
+  
+              <div className="bg-white p-8 border-l-4 border-blue-600 shadow-sm hover:shadow-xl transition-all w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+                <div className="flex items-center mb-4">
+                  <Activity className="w-6 h-6 text-blue-600 mr-3" />
+                  <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900">Clínicas</h4>
+                </div>
+                <p className="text-slate-600 font-medium">Pacientes, citas, historiales y gestión administrativa.</p>
+              </div>
+  
+              <div className="bg-white p-8 border-l-4 border-blue-600 shadow-sm hover:shadow-xl transition-all w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+                <div className="flex items-center mb-4">
+                  <Store className="w-6 h-6 text-blue-600 mr-3" />
+                  <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900">Comercios</h4>
+                </div>
+                <p className="text-slate-600 font-medium">Ventas, inventario, clientes y reportes.</p>
+              </div>
+  
+              <div className="bg-white p-8 border-l-4 border-blue-600 shadow-sm hover:shadow-xl transition-all w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+                <div className="flex items-center mb-4">
+                  <Building2 className="w-6 h-6 text-blue-600 mr-3" />
+                  <h4 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900">Empresas</h4>
+                </div>
+                <p className="text-slate-600 font-medium">Procesos internos, usuarios, reportes y dashboards.</p>
+              </div>
             </div>
-          ) : (
-            <form onSubmit={handleFormSubmit} className="w-full flex flex-col gap-8">
-              {/* Grid de dos columnas */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-                {/* Columna 1 */}
-                <div className="flex flex-col gap-8 contacto-form-group">
-                  {/* Nombres y Apellidos */}
-                  <div className="flex flex-col gap-1 text-left relative">
-                    <label htmlFor="name" className="text-xs font-semibold text-slate-400 tracking-wider">
-                      Nombres y Apellidos *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder=""
-                      className={`w-full py-2 bg-transparent border-b text-slate-800 focus:outline-none focus:border-[#3162fa] transition-colors ${formErrors.name ? 'border-red-500' : 'border-slate-300'
-                        }`}
-                    />
-                    {formErrors.name && (
-                      <span className="text-[10px] text-red-500 font-medium absolute -bottom-5 left-0">
-                        {formErrors.name}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Empresa */}
-                  <div className="flex flex-col gap-1 text-left">
-                    <label htmlFor="company" className="text-xs font-semibold text-slate-400 tracking-wider">
-                      Empresa
-                    </label>
-                    <input
-                      type="text"
-                      id="company"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleInputChange}
-                      placeholder=""
-                      className="w-full py-2 bg-transparent border-b border-slate-300 text-slate-800 focus:outline-none focus:border-[#3162fa] transition-colors"
-                    />
-                  </div>
-
-                  {/* Celular */}
-                  <div className="flex flex-col gap-1 text-left">
-                    <label htmlFor="phone" className="text-xs font-semibold text-slate-400 tracking-wider">
-                      PE +51 Celular
-                    </label>
-                    <div className="flex items-center gap-2 border-b border-slate-300 focus-within:border-[#3162fa] transition-colors">
-                      <span className="text-sm font-medium text-slate-400 pb-2">PE +51</span>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder=""
-                        className="w-full pb-2 bg-transparent text-slate-800 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Columna 2 */}
-                <div className="flex flex-col gap-8 contacto-form-group">
-                  {/* País */}
-                  <div className="flex flex-col gap-1 text-left relative">
-                    <label htmlFor="country" className="text-xs font-semibold text-slate-400 tracking-wider">
-                      País
-                    </label>
-                    <div className="relative w-full border-b border-slate-300 focus-within:border-[#3162fa] transition-colors">
-                      <select
-                        id="country"
-                        name="country"
-                        value={formData.country}
-                        onChange={handleInputChange}
-                        className="w-full py-2 pr-8 bg-transparent text-slate-800 focus:outline-none appearance-none font-medium cursor-pointer"
-                      >
-                        <option value="Perú">Perú</option>
-                        <option value="Colombia">Colombia</option>
-                        <option value="Chile">Chile</option>
-                        <option value="Argentina">Argentina</option>
-                        <option value="México">México</option>
-                        <option value="España">España</option>
-                        <option value="Estados Unidos">Estados Unidos</option>
-                        <option value="Otro">Otro</option>
-                      </select>
-                      <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                        ▼
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Correo */}
-                  <div className="flex flex-col gap-1 text-left relative">
-                    <label htmlFor="email" className="text-xs font-semibold text-slate-400 tracking-wider">
-                      Correo *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder=""
-                      className={`w-full py-2 bg-transparent border-b text-slate-800 focus:outline-none focus:border-[#3162fa] transition-colors ${formErrors.email ? 'border-red-500' : 'border-slate-300'
-                        }`}
-                    />
-                    {formErrors.email && (
-                      <span className="text-[10px] text-red-500 font-medium absolute -bottom-5 left-0">
-                        {formErrors.email}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Mensaje */}
-                  <div className="flex flex-col gap-1 text-left">
-                    <label htmlFor="message" className="text-xs font-semibold text-slate-400 tracking-wider">
-                      Mensaje
-                    </label>
-                    <input
-                      type="text"
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      placeholder=""
-                      className="w-full py-2 bg-transparent border-b border-slate-300 text-slate-800 focus:outline-none focus:border-[#3162fa] transition-colors"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Checkbox Acepto políticas */}
-              <div className="flex flex-col gap-2 mt-4 text-left relative contacto-form-group">
-                <label className="flex items-center gap-3 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    name="privacyAccepted"
-                    checked={formData.privacyAccepted}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 rounded text-[#3162fa] focus:ring-[#3162fa] border-slate-300 cursor-pointer"
-                  />
-                  <span className="text-xs font-medium text-slate-500">
-                    Acepto las <a href="#contacto" className="text-[#3162fa] underline hover:text-blue-700">Políticas de privacidad y uso de datos</a>
-                  </span>
-                </label>
-                {formErrors.privacyAccepted && (
-                  <span className="text-[10px] text-red-500 font-medium absolute -bottom-5 left-0">
-                    {formErrors.privacyAccepted}
-                  </span>
-                )}
-              </div>
-
-              {/* Botonera inferior: Limpiar y Enviar */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mt-8 pt-6 border-t border-slate-200/80 contacto-form-group">
-                {/* Limpiar formulario */}
-                <button
-                  type="button"
-                  onClick={handleClearForm}
-                  className="flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors py-2"
-                >
-                  <Trash2 size={16} />
-                  <span>Limpiar formulario</span>
-                </button>
-
-                {/* Enviar Mensaje */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-10 py-3 bg-[#3162fa] border border-[#3162fa] rounded-full text-xs font-bold tracking-wider text-white hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed transition-all shadow-sm flex items-center justify-center gap-2"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>
-                      <span>ENVIANDO...</span>
-                    </>
-                  ) : (
-                    <span>ENVIAR MENSAJE</span>
-                  )}
-                </button>
-              </div>
-            </form>
-          )}
+          </FadeIn>
         </div>
       </section>
 
-      {/* Pie de Página */}
-      <footer className="bg-slate-950 border-t border-slate-900 pt-16 pb-12 px-6 relative z-10 text-slate-400 font-light">
-        <div className="max-w-6xl mx-auto flex flex-col gap-12">
-          {/* Fila principal con información corporativa y de contacto */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 pb-10 border-b border-slate-900">
-            {/* Empresa y RUC */}
-            <div className="md:col-span-5 flex flex-col items-start gap-4">
-              <Logo />
-              <div className="text-left space-y-1.5 mt-1">
-                <p className="text-sm font-semibold tracking-wide text-slate-200 uppercase">
-                  WODITEK DISEÑO Y TECNOLOGIA S.A.C.
-                </p>
-                <p className="text-xs text-slate-400 font-medium">
-                  <span className="text-slate-500">RUC:</span> <span className="text-slate-300 font-mono tracking-wider">20615491609</span>
+      {/* 6. Testimonios */}
+      <section id="testimonials" className="py-24 bg-blue-600 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-800 rounded-full mix-blend-multiply filter blur-3xl opacity-50 translate-y-1/2 -translate-x-1/2"></div>
+        
+        <div className="w-full px-4 md:px-8 lg:px-16 max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <Quote className="w-12 h-12 mx-auto mb-6 text-blue-300 opacity-50" />
+            <h2 className="font-heading text-4xl md:text-5xl font-black uppercase [font-variation-settings:'wdth'_125] mb-6">Lo que dicen nuestros clientes</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Testimonial 1 */}
+            <div className="bg-[#0c121f]/40 p-8 rounded-sm backdrop-blur-sm border border-blue-500/30 flex flex-col justify-between hover:border-blue-400/50 transition-colors">
+              <div>
+                <div className="flex space-x-1 mb-4 text-amber-400">
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                </div>
+                <p className="font-serif italic text-lg leading-relaxed mb-6 text-blue-50">
+                  "Woditek nos ayudó a digitalizar nuestros procesos y mejorar la gestión del negocio. Ahora todo nuestro equipo trabaja de forma mucho más eficiente."
                 </p>
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed text-left max-w-sm">
-                Soluciones integrales de software a medida, arquitectura en la nube y consultoría tecnológica de alto impacto.
+              <div className="flex items-center">
+                <img src="https://i.pravatar.cc/150?img=32" alt="María Fernández" className="w-12 h-12 rounded-full mr-4 border-2 border-blue-400 object-cover" />
+                <div>
+                  <h4 className="font-heading font-bold uppercase tracking-wider text-sm">María Fernández</h4>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 2 */}
+            <div className="bg-[#0c121f]/40 p-8 rounded-sm backdrop-blur-sm border border-blue-500/30 flex flex-col justify-between hover:border-blue-400/50 transition-colors">
+              <div>
+                <div className="flex space-x-1 mb-4 text-amber-400">
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                </div>
+                <p className="font-serif italic text-lg leading-relaxed mb-6 text-blue-50">
+                  "El sistema a medida que desarrollaron se adaptó perfectamente a nuestra barbería. Las reservas y la caja cuadran a la perfección cada día."
+                </p>
+              </div>
+              <div className="flex items-center">
+                <img src="https://i.pravatar.cc/150?img=11" alt="Carlos Gómez" className="w-12 h-12 rounded-full mr-4 border-2 border-blue-400 object-cover" />
+                <div>
+                  <h4 className="font-heading font-bold uppercase tracking-wider text-sm">Carlos Gómez</h4>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 3 */}
+            <div className="bg-[#0c121f]/40 p-8 rounded-sm backdrop-blur-sm border border-blue-500/30 flex flex-col justify-between hover:border-blue-400/50 transition-colors">
+              <div>
+                <div className="flex space-x-1 mb-4 text-amber-400">
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current" />
+                  <Star className="w-5 h-5 fill-current text-blue-300/30" />
+                </div>
+                <p className="font-serif italic text-lg leading-relaxed mb-6 text-blue-50">
+                  "Increíble el nivel de detalle y el soporte post-implementación. Transformaron completamente la forma en que manejamos nuestro inventario y ventas online."
+                </p>
+              </div>
+              <div className="flex items-center">
+                <img src="https://i.pravatar.cc/150?img=5" alt="Ana López" className="w-12 h-12 rounded-full mr-4 border-2 border-blue-400 object-cover" />
+                <div>
+                  <h4 className="font-heading font-bold uppercase tracking-wider text-sm">Ana López</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. Preguntas frecuentes */}
+      <section className="py-24 bg-white relative">
+        <div className="w-full px-4 md:px-8 lg:px-16 max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-heading text-4xl md:text-5xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-6">Preguntas frecuentes</h2>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              { q: "¿Cuánto cuesta desarrollar un software a medida?", a: "Depende de las funcionalidades, cantidad de usuarios, integraciones y complejidad del proyecto." },
+              { q: "¿Pueden adaptar el sistema a nuestros procesos?", a: "Sí. El software se desarrolla de acuerdo con las necesidades específicas de cada negocio." },
+              { q: "¿El sistema funciona desde celular?", a: "Sí, dependiendo del proyecto podemos desarrollar interfaces adaptadas para computadoras, tablets y dispositivos móviles." },
+              { q: "¿Pueden integrar otros servicios?", a: "Sí. Podemos conectar el sistema con APIs y servicios externos según las necesidades del proyecto." }
+            ].map((faq, idx) => (
+              <div key={idx} className="border border-slate-200 rounded-sm overflow-hidden bg-slate-50">
+                <button 
+                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                  className="w-full flex items-center justify-between p-6 text-left hover:bg-slate-100 transition-colors focus:outline-none"
+                >
+                  <span className="font-heading text-xl font-bold uppercase [font-variation-settings:'wdth'_100] text-slate-900">{faq.q}</span>
+                  <ChevronDown className={`w-6 h-6 text-blue-600 transition-transform duration-300 ${openFaq === idx ? 'rotate-180' : ''}`} />
+                </button>
+                <div 
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${openFaq === idx ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}
+                >
+                  <div className="p-6 pt-0 text-slate-600 font-medium">
+                    {faq.a}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer id="contact" className="bg-slate-50 pt-20 pb-10 border-t border-slate-200">
+        <div className="w-full px-4 md:px-8 lg:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 items-center">
+            {/* Left: Info & Socials */}
+            <div className="text-left">
+              <p className="text-slate-600 text-sm leading-relaxed mb-6">
+                Somos una agencia dedicada al diseño y desarrollo de soluciones tecnológicas innovadoras, creadas para llevar tu negocio al siguiente nivel digital.
               </p>
-            </div>
-
-            {/* Ubicación y Canales de Contacto */}
-            <div className="md:col-span-4 flex flex-col items-start gap-3.5 text-left">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">
-                Dirección y Contacto
-              </h4>
-              <div className="flex items-start gap-2.5 text-xs text-slate-400">
-                <MapPin size={16} className="text-[#3162fa] shrink-0 mt-0.5" />
-                <span className="leading-relaxed">
-                  CAL.GERMAN SCHEREIBER NRO. 276 URB. SANTA ANA LIMA - LIMA - SAN ISIDRO
-                </span>
-              </div>
-              <div className="flex flex-col gap-2 mt-1 text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="text-slate-500 font-medium">Contacto:</span>
-                  <a
-                    href="mailto:soporte@woditek.com"
-                    className="text-slate-300 hover:text-[#3162fa] transition-colors flex items-center gap-1.5"
-                  >
-                    <Mail size={14} className="text-[#3162fa]" />
-                    <span>soporte@woditek.com</span>
-                  </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-slate-500 font-medium">Teléfono:</span>
-                  <a
-                    href="tel:+51907030003"
-                    className="text-slate-300 hover:text-[#3162fa] transition-colors flex items-center gap-1.5"
-                  >
-                    <Phone size={14} className="text-[#3162fa]" />
-                    <span>+51 907 030 003</span>
-                  </a>
-                </div>
+              <div className="flex space-x-4">
+                <a href="https://www.instagram.com/woditek.pe/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-slate-200 flex items-center justify-center text-slate-600 hover:bg-blue-600 hover:text-white transition-colors rounded-full"><InstagramIcon className="w-5 h-5" /></a>
+                <a href="https://www.tiktok.com/@woditek" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-slate-200 flex items-center justify-center text-slate-600 hover:bg-black hover:text-white transition-colors rounded-full"><TikTokIcon className="w-5 h-5" /></a>
+                <a href="https://wa.me/51953095173" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-slate-200 flex items-center justify-center text-slate-600 hover:bg-green-500 hover:text-white transition-colors rounded-full"><WhatsAppIcon className="w-5 h-5" /></a>
               </div>
             </div>
 
-            {/* Navegación Rápida */}
-            <div className="md:col-span-3 flex flex-col items-start md:items-end gap-3 text-left md:text-right">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">
-                Navegación
-              </h4>
-              <nav className="flex flex-col gap-2 text-xs text-slate-400 font-medium">
-                <a href="#hero" className="hover:text-white transition-colors duration-200">Home</a>
-                <a href="#nosotros" className="hover:text-white transition-colors duration-200 font-sans">Nosotros</a>
-                <a href="#propuesta" className="hover:text-white transition-colors duration-200 font-sans">Propuesta</a>
-                <a href="#servicios" className="hover:text-white transition-colors duration-200 font-sans">Servicios</a>
-                <a href="#contacto" className="hover:text-white transition-colors duration-200 font-sans">Contacto</a>
-              </nav>
+            {/* Center: Big Logo */}
+            <div className="flex justify-center">
+              <Logo isScrolled={true} imgClassName="h-20 md:h-28 lg:h-32 w-auto" />
+            </div>
+
+            {/* Right: Contact */}
+            <div className="md:text-right flex flex-col md:items-end">
+              <h4 className="font-bold text-slate-900 mb-6 text-left md:text-right w-full">Contáctanos</h4>
+              <ul className="space-y-4 text-sm text-slate-600">
+                <li className="flex items-start md:justify-end">
+                  <Mail className="w-5 h-5 text-blue-600 mr-3 mt-0.5 md:hidden shrink-0" />
+                  <span>soporte@woditek.com</span>
+                  <Mail className="w-5 h-5 text-blue-600 ml-3 mt-0.5 hidden md:block shrink-0" />
+                </li>
+                <li className="flex items-start md:justify-end">
+                  <Phone className="w-5 h-5 text-blue-600 mr-3 mt-0.5 md:hidden shrink-0" />
+                  <a href="https://wa.me/51953095173" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition-colors">+51 953 095 173</a>
+                  <Phone className="w-5 h-5 text-blue-600 ml-3 mt-0.5 hidden md:block shrink-0" />
+                </li>
+                <li className="flex items-start md:justify-end text-left md:text-right">
+                  <MapPin className="w-5 h-5 text-blue-600 mr-3 mt-0.5 shrink-0 md:hidden" />
+                  <span>CAL.GERMAN SCHEREIBER NRO. 276<br />URB. SANTA ANA<br />LIMA - LIMA - SAN ISIDRO</span>
+                  <MapPin className="w-5 h-5 text-blue-600 ml-3 mt-0.5 shrink-0 hidden md:block" />
+                </li>
+              </ul>
             </div>
           </div>
 
-          {/* Línea de Copyright inferior */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 text-center sm:text-left">
-            <div>
-              © 2026 Woditek. Todos los derechos reservados.
-            </div>
-            <div className="text-[11px] text-slate-600">
-              Innovación, diseño y tecnología
-            </div>
+          <div className="border-t border-slate-200 pt-8 text-center text-sm text-slate-500">
+            © {new Date().getFullYear()} Woditek. Todos los derechos reservados.
           </div>
         </div>
       </footer>
+      {/* Contact Modal */}
+      {isContactModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            onClick={handleCloseModal}
+          ></div>
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg relative z-10 overflow-y-auto max-h-[90vh] animate-in fade-in zoom-in duration-300">
+            <div className="p-6 md:p-8">
+              {isSuccess ? (
+                <div className="flex flex-col items-center justify-center py-6 text-center animate-in zoom-in duration-300">
+                  <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-6">
+                    <Check size={40} className="font-bold" />
+                  </div>
+                  <h3 className="font-heading text-3xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900 mb-4">
+                    ¡Mensaje Enviado!
+                  </h3>
+                  <p className="text-slate-600 mb-8 text-lg px-4">
+                    Gracias por contactarnos. Nos comunicaremos contigo muy pronto para hacer realidad tu proyecto.
+                  </p>
+                  <button 
+                    onClick={handleCloseModal}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-lg py-4 rounded-lg shadow-md hover:shadow-lg transition-all"
+                  >
+                    Entendido
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-slate-900">
+                      Cuéntanos tu proyecto
+                    </h3>
+                    <button 
+                      onClick={handleCloseModal}
+                      className="text-slate-400 hover:text-slate-600 transition-colors"
+                    >
+                      <X className="w-6 h-6" />
+                    </button>
+                  </div>
+                  
+                  <form className="space-y-4" onSubmit={handleLeadSubmit}>
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-1">Nombre completo</label>
+                      <input type="text" id="name" required className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all outline-none" placeholder="Tu nombre" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} disabled={isSubmitting} />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-1">Correo electrónico</label>
+                      <input type="email" id="email" required className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all outline-none" placeholder="tucorreo@ejemplo.com" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} disabled={isSubmitting} />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-semibold text-slate-700 mb-1">Celular / WhatsApp</label>
+                      <input type="tel" id="phone" className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all outline-none" placeholder="+51 999 999 999" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} disabled={isSubmitting} />
+                    </div>
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-semibold text-slate-700 mb-1">Detalles del proyecto</label>
+                      <textarea id="message" rows={4} required className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition-all outline-none resize-none" placeholder="¿Qué solución digital tienes en mente?" value={formData.details} onChange={(e) => setFormData({...formData, details: e.target.value})} disabled={isSubmitting}></textarea>
+                    </div>
+                    <button type="submit" disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-lg py-4 rounded-lg shadow-md hover:shadow-lg transition-all mt-4 disabled:bg-slate-400 flex justify-center items-center gap-2">
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>
+                          Enviando...
+                        </>
+                      ) : 'Enviar Mensaje'}
+                    </button>
+                  </form>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
+      {/* WhatsApp Floating Button */}
+      <a 
+        href="https://wa.me/51953095173?text=Hola%20Woditek,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20servicios" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white shadow-[0_4px_14px_0_rgba(37,211,102,0.39)] hover:shadow-[0_6px_20px_rgba(37,211,102,0.23)] hover:scale-110 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center group"
+        style={{ width: '60px', height: '60px', borderRadius: '50%' }}
+        aria-label="Contactar por WhatsApp"
+      >
+        <svg viewBox="0 0 24 24" className="w-8 h-8 md:w-10 md:h-10 fill-current" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.663-2.06-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+        </svg>
+      </a>
     </div>
   );
 }

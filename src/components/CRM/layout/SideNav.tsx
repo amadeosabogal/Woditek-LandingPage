@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 // You will need logoUrl to match the Admin logo if possible, but we'll use text for now
-import logoUrl from '../../../assets/logo_blue.png';
+import logoUrl from '../../../assets/logo_blue.webp';
 
 interface SideNavProps {
   isMobileMenuOpen: boolean;

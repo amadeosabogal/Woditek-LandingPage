@@ -4,7 +4,7 @@ import autoTable from 'jspdf-autotable';
 import { Calculator, Download, FileText, CheckCircle, Circle, Trash2, Plus, X, LayoutGrid } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 import type { ClientType, Quote, QuoteItem } from '../../context/AdminContext';
-import logoUrl from '../../assets/logo_blue.png';
+import logoUrl from '../../assets/logo_blue.webp';
 
 export const Cotizaciones = () => {
   const { 
@@ -125,7 +125,7 @@ export const Cotizaciones = () => {
     return acc + (q * u * tc);
   }, 0);
 
-  const generatePDF = (logoImg: HTMLImageElement | null, clientIdToSave: string, clientInfo: any) => {
+  const generatePDF = (logoImg: HTMLImageElement | null, adminSigImg: HTMLImageElement | null, engineerSigImg: HTMLImageElement | null, clientIdToSave: string, clientInfo: any) => {
     const doc = new jsPDF();
     
     const primaryColor: [number, number, number] = [53, 103, 164];
@@ -295,6 +295,12 @@ export const Cotizaciones = () => {
     doc.setLineWidth(0.5);
     
     // Firma Izquierda
+    if (adminSigImg) {
+      const sigRatio = adminSigImg.width / adminSigImg.height;
+      const sigHeight = 25;
+      const sigWidth = sigHeight * sigRatio;
+      doc.addImage(adminSigImg, 'PNG', 60 - (sigWidth / 2), sigY - sigHeight - 2, sigWidth, sigHeight);
+    }
     doc.line(25, sigY, 95, sigY);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8);
@@ -304,6 +310,12 @@ export const Cotizaciones = () => {
     doc.text('ADMINISTRACIÓN', 60, sigY + 9, { align: 'center' });
 
     // Firma Derecha
+    if (engineerSigImg) {
+      const sigRatio = engineerSigImg.width / engineerSigImg.height;
+      const sigHeight = 25;
+      const sigWidth = sigHeight * sigRatio;
+      doc.addImage(engineerSigImg, 'PNG', 150 - (sigWidth / 2), sigY - sigHeight - 2, sigWidth, sigHeight);
+    }
     doc.setDrawColor(120, 150, 220);
     doc.line(115, sigY, 185, sigY);
     doc.setTextColor(100, 100, 100);
@@ -353,12 +365,44 @@ export const Cotizaciones = () => {
     doc.setTextColor(...textColor);
     
     let detailsY = 72;
-    const paragraphs = projectDetails.split('\n');
+    
+    // Process project details to handle hard-wrapped text and numbered lists
+    const rawLines = projectDetails.split('\n');
+    const paragraphs: string[] = [];
+    let currentParagraph = '';
+
+    rawLines.forEach(line => {
+      const trimmed = line.trim();
+      
+      // Empty line means explicit paragraph break
+      if (!trimmed) {
+        if (currentParagraph) {
+          paragraphs.push(currentParagraph);
+          currentParagraph = '';
+        }
+        return;
+      }
+      
+      // If line starts with a number (e.g. "1. "), dash, or bullet, it's a new paragraph
+      if (/^(\d+\.|[-*•])\s/.test(trimmed)) {
+        if (currentParagraph) {
+          paragraphs.push(currentParagraph);
+        }
+        currentParagraph = trimmed;
+      } else {
+        // Otherwise append to current paragraph (removing the hard line break)
+        currentParagraph += (currentParagraph ? ' ' : '') + trimmed;
+      }
+    });
+    if (currentParagraph) {
+      paragraphs.push(currentParagraph);
+    }
+
     paragraphs.forEach((paragraph: string) => {
-      if (paragraph.trim() !== '') {
+      if (paragraph !== '') {
         const lines = doc.splitTextToSize(paragraph, 180);
         doc.text(lines, 14, detailsY, { align: 'justify', maxWidth: 180 });
-        detailsY += lines.length * 5 + 4; // Add extra margin between paragraphs
+        detailsY += lines.length * 5 + 6; // Add extra margin between paragraphs
         
         // Handle page overflow within details
         if (detailsY > 280) {
@@ -418,10 +462,24 @@ export const Cotizaciones = () => {
 
     const clientInfo = clients.find(c => c.id === clientIdToSave) || { name: newClientName, document: newClientDoc };
 
-    const img = new Image();
-    img.src = logoUrl;
-    img.onload = () => generatePDF(img, clientIdToSave, clientInfo);
-    img.onerror = () => generatePDF(null, clientIdToSave, clientInfo);
+    const loadImages = async () => {
+      const loadImage = (src: string): Promise<HTMLImageElement | null> => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = () => resolve(img);
+          img.onerror = () => resolve(null);
+        });
+      };
+
+      const logoImg = await loadImage(logoUrl);
+      const adminSigImg = await loadImage('/firma_admin_transparent.webp');
+      const engineerSigImg = await loadImage('/WhatsApp_Image_2026-09-07_at_11.55.19_AM-removebg-preview.webp');
+
+      generatePDF(logoImg, adminSigImg, engineerSigImg, clientIdToSave, clientInfo);
+    };
+
+    loadImages();
   };
 
   const handleToggle50 = (quote: Quote) => {

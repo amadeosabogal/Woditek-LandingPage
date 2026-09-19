@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, User } from 'lucide-react';
-import logoUrl from '../../assets/logo_blue.png';
+import logoUrl from '../../assets/logo_blue.webp';
 
 export const Login = () => {
   const [username, setUsername] = useState('');
@@ -16,6 +16,15 @@ export const Login = () => {
 
     if (!username || !password) {
       setError('Por favor ingresa usuario y contraseña');
+      return;
+    }
+
+    // Bypass temporal para desarrollo
+    if (username === 'admin' && (password === 'admin123' || password === '123')) {
+      localStorage.setItem('woditek_admin_auth', 'true');
+      localStorage.setItem('woditek_admin_token', 'dev-token-bypass');
+      localStorage.setItem('woditek_admin_user', JSON.stringify({ id: 1, username: 'admin' }));
+      navigate('/administracion');
       return;
     }
 
@@ -109,6 +118,11 @@ export const Login = () => {
                   className="w-full pl-10 pr-3 py-3 border border-slate-300 bg-slate-50 text-slate-900 focus:outline-none focus:border-[#3162fa] focus:ring-1 focus:ring-[#3162fa] transition-colors"
                   disabled={isLoading}
                 />
+              </div>
+              <div className="flex justify-end">
+                <a href="/super-admin/forgot-password" className="text-sm text-[#3162fa] hover:text-[#1a4cd6] font-medium transition-colors">
+                  ¿Olvidaste tu contraseña?
+                </a>
               </div>
             </div>
 

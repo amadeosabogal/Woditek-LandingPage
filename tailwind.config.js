@@ -71,6 +71,8 @@ export default {
       },
       fontFamily: {
         sans: ['Outfit', 'Inter', 'sans-serif'],
+        heading: ['Archivo', 'sans-serif'],
+        serif: ['Instrument Serif', 'serif'],
         "body-sm": ["Inter", "sans-serif"],
         "display-lg": ["Hanken Grotesk", "sans-serif"],
         "data-mono": ["JetBrains Mono", "monospace"],

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import logoUrl from '../../assets/logo_blue.png';
+import logoUrl from '../../assets/logo_blue.webp';
 
 import { 
   LayoutDashboard, 
@@ -14,7 +14,8 @@ import {
   HardHat,
   Menu,
   X,
-  Download
+  Download,
+  MessageSquare
 } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -58,6 +59,7 @@ export const AdminLayout = () => {
 
   const navItems = [
     { to: '.', icon: <LayoutDashboard size={20} />, label: 'Dashboard', end: true },
+    { to: 'leads', icon: <MessageSquare size={20} />, label: 'Leads' },
     { to: 'trabajadores', icon: <HardHat size={20} />, label: 'Trabajadores' },
     { to: 'clientes', icon: <Users size={20} />, label: 'Cliente' },
     { to: 'cotizaciones', icon: <FileText size={20} />, label: 'Cotizaciones' },
