@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import logoUrl from '../../assets/logo_blue.webp';
 
 import { 
@@ -15,7 +15,9 @@ import {
   Menu,
   X,
   Download,
-  MessageSquare
+  MessageSquare,
+  Calendar,
+  Kanban
 } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -32,6 +34,8 @@ export const AdminLayout = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isKanban = location.pathname.includes('kanban-clientes');
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -60,6 +64,7 @@ export const AdminLayout = () => {
   const navItems = [
     { to: '.', icon: <LayoutDashboard size={20} />, label: 'Dashboard', end: true },
     { to: 'leads', icon: <MessageSquare size={20} />, label: 'Leads' },
+    { to: 'kanban-clientes', icon: <Kanban size={20} />, label: 'Kanban Clientes' },
     { to: 'trabajadores', icon: <HardHat size={20} />, label: 'Trabajadores' },
     { to: 'clientes', icon: <Users size={20} />, label: 'Cliente' },
     { to: 'cotizaciones', icon: <FileText size={20} />, label: 'Cotizaciones' },
@@ -68,6 +73,7 @@ export const AdminLayout = () => {
     { to: 'pagos', icon: <Receipt size={20} />, label: 'Pagos' },
     { to: 'adelantos', icon: <Banknote size={20} />, label: 'Adelantos' },
     { to: 'proyectos', icon: <Briefcase size={20} />, label: 'Proyectos' },
+    { to: 'calendario', icon: <Calendar size={20} />, label: 'Calendario' },
   ];
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -160,8 +166,8 @@ export const AdminLayout = () => {
             Panel de Administración
           </h1>
         </header>
-        <div className="flex-1 p-4 md:p-8 overflow-auto">
-          <div className="max-w-6xl mx-auto">
+        <div className={`flex-1 overflow-auto ${isKanban ? 'p-0' : 'p-4 md:p-8'}`}>
+          <div className={`${isKanban ? 'w-full h-full' : 'max-w-6xl mx-auto'}`}>
             <Outlet />
           </div>
         </div>

@@ -131,11 +131,23 @@ export const Cotizaciones = () => {
     const primaryColor: [number, number, number] = [53, 103, 164];
     const textColor: [number, number, number] = [50, 50, 50];
     
+    const getPngDataUrl = (img: HTMLImageElement) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(img, 0, 0);
+        return canvas.toDataURL('image/png');
+      }
+      return img.src;
+    };
+
     if (logoImg) {
       const imgRatio = logoImg.width / logoImg.height;
       const targetHeight = 16;
       const targetWidth = targetHeight * imgRatio;
-      doc.addImage(logoImg, 'PNG', 14, 15, targetWidth, targetHeight);
+      doc.addImage(getPngDataUrl(logoImg), 'PNG', 14, 15, targetWidth, targetHeight);
     } else {
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(32);
@@ -299,7 +311,7 @@ export const Cotizaciones = () => {
       const sigRatio = adminSigImg.width / adminSigImg.height;
       const sigHeight = 25;
       const sigWidth = sigHeight * sigRatio;
-      doc.addImage(adminSigImg, 'PNG', 60 - (sigWidth / 2), sigY - sigHeight - 2, sigWidth, sigHeight);
+      doc.addImage(getPngDataUrl(adminSigImg), 'PNG', 60 - (sigWidth / 2), sigY - sigHeight - 2, sigWidth, sigHeight);
     }
     doc.line(25, sigY, 95, sigY);
     doc.setFont('helvetica', 'bold');
@@ -314,7 +326,7 @@ export const Cotizaciones = () => {
       const sigRatio = engineerSigImg.width / engineerSigImg.height;
       const sigHeight = 25;
       const sigWidth = sigHeight * sigRatio;
-      doc.addImage(engineerSigImg, 'PNG', 150 - (sigWidth / 2), sigY - sigHeight - 2, sigWidth, sigHeight);
+      doc.addImage(getPngDataUrl(engineerSigImg), 'PNG', 150 - (sigWidth / 2), sigY - sigHeight - 2, sigWidth, sigHeight);
     }
     doc.setDrawColor(120, 150, 220);
     doc.line(115, sigY, 185, sigY);
@@ -329,7 +341,7 @@ export const Cotizaciones = () => {
       const imgRatio = logoImg.width / logoImg.height;
       const targetHeight = 16;
       const targetWidth = targetHeight * imgRatio;
-      doc.addImage(logoImg, 'PNG', 14, 15, targetWidth, targetHeight);
+      doc.addImage(getPngDataUrl(logoImg), 'PNG', 14, 15, targetWidth, targetHeight);
     } else {
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(32);

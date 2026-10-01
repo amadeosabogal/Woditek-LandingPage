@@ -87,6 +87,15 @@ export interface Quote {
   items?: QuoteItem[];
 }
 
+export interface CalendarEvent {
+  id?: string | number;
+  title: string;
+  start_date: string;
+  end_date: string;
+  description?: string;
+  created_at?: string;
+}
+
 interface AdminContextProps {
   incomes: Income[];
   addIncome: (income: Income) => Promise<void>;
@@ -123,6 +132,10 @@ interface AdminContextProps {
   addQuote: (quote: Quote) => Promise<void>;
   updateQuote: (quote: Quote) => Promise<void>;
   deleteQuote: (id: string) => Promise<void>;
+
+  calendarEvents: CalendarEvent[];
+  addCalendarEvent: (event: CalendarEvent) => Promise<void>;
+  deleteCalendarEvent: (id: string | number) => Promise<void>;
   
   netMoney: number;
   netInterbank: number;
@@ -143,6 +156,7 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
 
@@ -171,9 +185,11 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
       }
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return res;
-    } catch (error) {
-      console.error("API Fetch Error:", error);
-      alert("Ocurrió un error al contactar al servidor. Revisa tu conexión o vuelve a iniciar sesión.");
+    } catch (error: any) {
+      if (error?.message !== 'No autorizado') {
+        console.error("API Fetch Error:", error);
+        // Removed the alert and the redirect so it doesn't get stuck in a login loop when backend is down
+      }
       throw error;
     }
   };
@@ -181,26 +197,39 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const loadData = async () => {
     try {
       setIsLoading(true);
+      
+      // Función auxiliar para que los errores individuales no generen "Unhandled Promise Rejection"
+      const safeFetchJSON = async (url: string, defaultValue: any = []) => {
+        try {
+          const res = await apiFetch(url);
+          return await res.json();
+        } catch (error) {
+          console.error(`Error loading ${url}:`, error);
+          return defaultValue;
+        }
+      };
+
       const [
-        incRes, advRes, payRes,
-        debtRes, cliRes, workRes,
-        projRes, quoteRes
+        incData, advData, payData,
+        debtData, cliData, workData,
+        projData, quoteData, calData
       ] = await Promise.all([
-        apiFetch(`${API_BASE}/ingresos`), apiFetch(`${API_BASE}/adelantos`), apiFetch(`${API_BASE}/pagos`),
-        apiFetch(`${API_BASE}/deudas`), apiFetch(`${API_BASE}/clientes`), apiFetch(`${API_BASE}/trabajadores`),
-        apiFetch(`${API_BASE}/proyectos`), apiFetch(`${API_BASE}/cotizaciones`)
+        safeFetchJSON(`${API_BASE}/ingresos`), safeFetchJSON(`${API_BASE}/adelantos`), safeFetchJSON(`${API_BASE}/pagos`),
+        safeFetchJSON(`${API_BASE}/deudas`), safeFetchJSON(`${API_BASE}/clientes`), safeFetchJSON(`${API_BASE}/trabajadores`),
+        safeFetchJSON(`${API_BASE}/proyectos`), safeFetchJSON(`${API_BASE}/cotizaciones`), safeFetchJSON(`${API_BASE}/calendario`)
       ]);
       
-      setIncomes(await incRes.json());
-      setAdvances(await advRes.json());
-      setPayments(await payRes.json());
-      setClientDebts(await debtRes.json());
-      setClients(await cliRes.json());
-      setWorkers(await workRes.json());
-      setProjects(await projRes.json());
-      setQuotes(await quoteRes.json());
+      setIncomes(incData);
+      setAdvances(advData);
+      setPayments(payData);
+      setClientDebts(debtData);
+      setClients(cliData);
+      setWorkers(workData);
+      setProjects(projData);
+      setQuotes(quoteData);
+      setCalendarEvents(calData);
     } catch (error) {
-      console.error("Error loading data:", error);
+      console.error("Error global en loadData:", error);
     } finally {
       setIsLoading(false);
     }
@@ -298,6 +327,16 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
     setQuotes(prev => prev.filter(q => q.id !== id));
   };
 
+  const addCalendarEvent = async (event: CalendarEvent) => {
+    const res = await apiFetch(`${API_BASE}/calendario`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(event) });
+    const created = await res.json();
+    setCalendarEvents(prev => [...prev, created]);
+  };
+  const deleteCalendarEvent = async (id: string | number) => {
+    await apiFetch(`${API_BASE}/calendario/${id}`, { method: 'DELETE' });
+    setCalendarEvents(prev => prev.filter(c => c.id !== id));
+  };
+
   const totalIncome = incomes.reduce((acc, curr) => acc + curr.amount, 0);
   const totalAdvances = advances.reduce((acc, curr) => acc + curr.amountGiven, 0);
   const totalPayments = payments.reduce((acc, curr) => acc + curr.amount, 0);
@@ -324,6 +363,7 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
         workers, addWorker, deleteWorker,
         projects, addProject, updateProject, deleteProject,
         quotes, addQuote, updateQuote, deleteQuote,
+        calendarEvents, addCalendarEvent, deleteCalendarEvent,
         netMoney, netInterbank, netBancoNacion,
         isLoading
       }}

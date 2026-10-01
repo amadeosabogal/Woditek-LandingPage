@@ -1,4 +1,3 @@
-import CRMRoutes from './CRMRoutes';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';
 import { AdminLayout } from './pages/Admin/AdminLayout';
@@ -18,6 +17,8 @@ import { Clientes } from './pages/Admin/Clientes';
 import { Proyectos } from './pages/Admin/Proyectos';
 import { Trabajadores } from './pages/Admin/Trabajadores';
 import { Leads } from './pages/Admin/Leads';
+import { Calendario } from './pages/Admin/Calendario';
+import KanbanClientes from './pages/Admin/KanbanClientes';
 
 export default function App() {
   return (
@@ -31,8 +32,6 @@ export default function App() {
         <Route path="/super-admin/forgot-password" element={<ForgotPassword />} />
         <Route path="/super-admin/reset-password" element={<ResetPassword />} />
 
-        {/* Rutas del CRM */}
-        <Route path="/crm/*" element={<CRMRoutes />} />
 
         {/* Rutas de Administracion (Protegidas) */}
         <Route element={<ProtectedRoute />}>
@@ -54,6 +53,8 @@ export default function App() {
           <Route path="proyectos" element={<Proyectos />} />
           <Route path="trabajadores" element={<Trabajadores />} />
           <Route path="leads" element={<Leads />} />
+          <Route path="calendario" element={<Calendario />} />
+          <Route path="kanban-clientes" element={<KanbanClientes />} />
         </Route>
         </Route>
       </Routes>
