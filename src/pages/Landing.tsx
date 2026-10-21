@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Logo } from '../components/Logo';
 import { FadeIn } from '../components/FadeIn';
+import { WebPlans } from '../components/WebPlans';
+import { initAnalytics, trackLeadSubmission, trackFloatingWhatsAppClick } from '../utils/analytics';
 import {
   Phone,
   Mail,
@@ -69,6 +71,7 @@ export default function Landing() {
 
       if (response.ok) {
         setIsSuccess(true);
+        trackLeadSubmission({ name: formData.name, email: formData.email });
       } else {
         alert('Ocurrió un error al enviar tu mensaje. Intenta de nuevo.');
       }
@@ -89,7 +92,19 @@ export default function Landing() {
     }, 300); // Dar tiempo a la animación de cierre
   };
 
+  // Abre el modal prellenando el plan seleccionado
+  const handleOpenContactWithPlan = (planName?: string) => {
+    if (planName) {
+      setFormData(prev => ({
+        ...prev,
+        details: `Hola Woditek, deseo recibir información y cotizar el ${planName} para mi negocio.`
+      }));
+    }
+    setIsContactModalOpen(true);
+  };
+
   useEffect(() => {
+    initAnalytics();
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -175,8 +190,9 @@ export default function Landing() {
           {/* Navigation Links */}
           <div className="w-full md:w-auto flex flex-col items-center space-y-4 md:space-y-6">
             <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('home'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Inicio</button>
-            <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('why-choose-us'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Beneficios</button>
             <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('services'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Servicios</button>
+            <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('planes'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Planes Web</button>
+            <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('why-choose-us'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Beneficios</button>
             <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('how-we-work'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Proceso</button>
             <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('adaptability'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Adaptabilidad</button>
             <button onClick={() => { setIsMobileMenuOpen(false); scrollTo('testimonials'); }} className="text-center font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase [font-variation-settings:'wdth'_125] hover:text-blue-200 transition-colors leading-none">Testimonios</button>
@@ -262,6 +278,12 @@ export default function Landing() {
                   <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Catálogos digitales</li>
                   <li className="flex items-start text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 text-blue-600 mr-2 mt-0.5 shrink-0"/> Sitios web empresariales</li>
                 </ul>
+                <div className="pt-6 mt-4 border-t border-slate-100">
+                  <button onClick={() => scrollTo('planes')} className="inline-flex items-center text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors group/btn">
+                    <span>Ver planes y precios</span>
+                    <ArrowRight className="w-4 h-4 ml-1.5 transform group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -356,6 +378,8 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Planes de Desarrollo Web */}
+      <WebPlans onOpenContact={handleOpenContactWithPlan} />
 
       {/* 3. ¿Por qué elegir Woditek? */}
       <section id="why-choose-us" className="py-24 bg-white">
@@ -592,6 +616,8 @@ export default function Landing() {
           <div className="space-y-4">
             {[
               { q: "¿Cuánto cuesta desarrollar un software a medida?", a: "Nuestros proyectos son inversiones diseñadas para multiplicar tu rentabilidad. El costo se adapta al tamaño de tu visión y a los objetivos de tu empresa. Contáctanos para una asesoría gratuita y diseñaremos una propuesta a tu medida sin compromiso." },
+              { q: "¿Qué incluye el hosting y dominio en los planes web?", a: "Todos nuestros planes de desarrollo web incluyen el registro de tu dominio (.com) y el hosting SSD de alta velocidad por 1 año completo, además del certificado de seguridad SSL para que tu sitio sea 100% seguro (HTTPS)." },
+              { q: "¿Cómo es la modalidad de pago para los proyectos web?", a: "Trabajamos con un esquema transparente: 50% de anticipo inicial al arrancar el diseño y desarrollo, y el 50% restante únicamente al finalizar el proyecto tras tu completa conformidad y puesta en marcha." },
               { q: "¿Pueden adaptar el sistema a nuestros procesos?", a: "¡Absolutamente! No te obligamos a adaptarte a un software rígido. Construimos una plataforma exclusiva que se amolda milimétricamente a tu forma de trabajar, automatizando tus tareas para que tu equipo sea mucho más productivo." },
               { q: "¿El sistema funciona desde celular?", a: "Sí. Todo lo que construimos es 100% responsivo. Podrás gestionar tu negocio, revisar reportes y controlar tus operaciones desde cualquier dispositivo: computadora, tablet o smartphone, en cualquier parte del mundo." },
               { q: "¿Pueden integrar otros servicios?", a: "Por supuesto. Conectamos tu nuevo sistema con tus herramientas favoritas (pasarelas de pago, facturación electrónica, WhatsApp, redes sociales) para centralizar absolutamente toda tu operación en un solo lugar." }
@@ -745,6 +771,7 @@ export default function Landing() {
         href="https://wa.me/51953095173?text=Hola%20Woditek,%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20servicios" 
         target="_blank" 
         rel="noopener noreferrer" 
+        onClick={() => trackFloatingWhatsAppClick()}
         className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white shadow-[0_4px_14px_0_rgba(37,211,102,0.39)] hover:shadow-[0_6px_20px_rgba(37,211,102,0.23)] hover:scale-110 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center group"
         style={{ width: '60px', height: '60px', borderRadius: '50%' }}
         aria-label="Contactar por WhatsApp"
