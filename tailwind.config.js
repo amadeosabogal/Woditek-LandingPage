@@ -8,6 +8,13 @@ export default {
   theme: {
     extend: {
       colors: {
+        /* Superficies oscuras de la landing */
+        ink: {
+          950: '#050a14',
+          900: '#0a1222',
+          800: '#101a2f',
+          700: '#18233d',
+        },
         woditek: {
           electric: '#0047FF',
           dark: '#020617',
@@ -60,7 +67,59 @@ export default {
         "DEFAULT": "0.125rem",
         "lg": "0.25rem",
         "xl": "0.5rem",
-        "full": "0.75rem"
+        "full": "0.75rem",
+        /* Círculo/píldora real para la landing (rounded-full queda en 0.75rem por el panel admin) */
+        "pill": "9999px"
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-8px)' }
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' }
+        },
+        'grow-y': {
+          '0%': { transform: 'scaleY(0)' },
+          '100%': { transform: 'scaleY(1)' }
+        },
+        'grow-x': {
+          '0%': { transform: 'scaleX(0)' },
+          '100%': { transform: 'scaleX(1)' }
+        },
+        blob: {
+          '0%, 100%': { transform: 'translate3d(0, 0, 0) scale(1)' },
+          '33%': { transform: 'translate3d(40px, -30px, 0) scale(1.08)' },
+          '66%': { transform: 'translate3d(-30px, 30px, 0) scale(0.95)' }
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '100%': { backgroundPosition: '200% 50%' }
+        },
+        'pulse-ring': {
+          '0%': { transform: 'scale(0.9)', opacity: '0.7' },
+          '100%': { transform: 'scale(1.9)', opacity: '0' }
+        },
+        'fade-up': {
+          '0%': { opacity: '0', transform: 'translateY(16px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
+        },
+        draw: {
+          '0%': { strokeDashoffset: '1' },
+          '100%': { strokeDashoffset: '0' }
+        }
+      },
+      animation: {
+        float: 'float 6s ease-in-out infinite',
+        marquee: 'marquee 40s linear infinite',
+        'grow-y': 'grow-y 1s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'grow-x': 'grow-x 1.4s cubic-bezier(0.16, 1, 0.3, 1) both',
+        blob: 'blob 18s ease-in-out infinite',
+        shimmer: 'shimmer 6s linear infinite',
+        'pulse-ring': 'pulse-ring 2s ease-out infinite',
+        'fade-up': 'fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
+        draw: 'draw 1.6s ease-out both'
       },
       spacing: {
         "density-compact": "8px",

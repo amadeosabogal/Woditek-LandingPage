@@ -11,18 +11,13 @@ import {
   Zap,
   Cloud,
   Headphones,
-  Layers,
-  Check,
-  HelpCircle
+  ChevronDown,
 } from 'lucide-react';
 import { FadeIn } from './FadeIn';
+import { SectionHeading } from './ui/SectionHeading';
+import { SpotlightCard } from './ui/SpotlightCard';
+import { WhatsAppIcon } from './ui/Icons';
 import { trackPlanClick, trackCustomEnterpriseClick } from '../utils/analytics';
-
-const WhatsAppIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-  </svg>
-);
 
 interface WebPlan {
   id: string;
@@ -43,8 +38,34 @@ interface WebPlansProps {
   onOpenContact?: (planName?: string) => void;
 }
 
-export const WebPlans: React.FC<WebPlansProps> = ({ onOpenContact }) => {
+const VISIBLE_FEATURES = 5;
+
+const PILLARS = [
+  {
+    icon: ShieldCheck,
+    title: 'Sin mensualidades ocultas',
+    text: 'El sitio web y código son 100% tuyos. No pagarás cuotas mensuales forzosas de mantenimiento de plataforma.',
+  },
+  {
+    icon: Cloud,
+    title: 'Dominio y hosting gratis',
+    text: 'Tu proyecto incluye dominio .com y hosting SSD de alta velocidad con certificado SSL HTTPS por 1 año completo.',
+  },
+  {
+    icon: Zap,
+    title: 'Carga ultrarrápida y SEO',
+    text: 'Desarrollado con estándares web modernos para cargar en menos de 2 segundos y conseguir mejor posición en Google.',
+  },
+  {
+    icon: Headphones,
+    title: 'Soporte y garantía real',
+    text: 'Atención directa con nuestro equipo técnico de ingeniería. Garantía incluida ante cualquier bug o consulta.',
+  },
+];
+
+export const WebPlans: React.FC<WebPlansProps> = () => {
   const [currency, setCurrency] = useState<'PEN' | 'USD'>('PEN');
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   const plans: WebPlan[] = [
     {
@@ -74,7 +95,7 @@ export const WebPlans: React.FC<WebPlansProps> = ({ onOpenContact }) => {
       id: 'corporativa',
       name: 'Web Corporativa Pro',
       tagline: 'Para empresas, pymes y marcas',
-      badge: 'MÁS POPULAR ⭐',
+      badge: 'MÁS POPULAR',
       isPopular: true,
       deliveryTime: '7 a 12 días hábiles',
       pricePEN: '1,890',
@@ -121,247 +142,199 @@ export const WebPlans: React.FC<WebPlansProps> = ({ onOpenContact }) => {
   ];
 
   return (
-    <section id="planes" className="py-24 md:py-32 bg-[#0c121f] text-white relative overflow-hidden">
-      {/* Decorative ambient glowing orbs */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-blue-600/15 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-400/10 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent pointer-events-none"></div>
+    <section id="planes" className="relative py-16 sm:py-24 md:py-32 bg-ink-900 overflow-hidden">
+      <div className="absolute top-0 inset-x-0 hairline"></div>
+      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-blue-600/15 rounded-pill blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-cyan-500/10 rounded-pill blur-[120px] pointer-events-none"></div>
+      <div className="absolute inset-0 grid-fade opacity-60 pointer-events-none"></div>
 
-      <div className="w-full px-4 md:px-8 lg:px-16 max-w-7xl mx-auto relative z-10">
-        {/* Section Header */}
-        <FadeIn>
-          <div className="text-center mb-16">
-            <p className="font-serif italic text-xl md:text-2xl text-blue-400 mb-3">
-              Inversión transparente y resultados reales
-            </p>
-            <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-black uppercase [font-variation-settings:'wdth'_125] text-white mb-6 tracking-tight">
-              Planes de Desarrollo Web
-            </h2>
-            <p className="text-base md:text-lg text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-              Soluciones digitales creadas con código limpio, alta velocidad y diseño estratégico para acelerar tus ventas. Sin pagos mensuales obligatorios.
-            </p>
+      <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+        <SectionHeading
+          title={
+            <>
+              Planes de <span className="text-gradient">desarrollo web</span>
+            </>
+          }
+          description="Soluciones digitales creadas con código limpio, alta velocidad y diseño estratégico para acelerar tus ventas. Sin pagos mensuales obligatorios."
+        />
 
-            {/* Currency Switcher */}
-            <div className="flex items-center justify-center mt-8">
-              <div className="inline-flex items-center p-1.5 bg-slate-900/90 border border-slate-700/80 rounded-full shadow-2xl backdrop-blur-md">
+        {/* Currency Switcher */}
+        <FadeIn delay={100}>
+          <div className="flex items-center justify-center mt-8 mb-14">
+            <div className="inline-flex items-center p-1.5 bg-ink-950/90 border border-white/10 rounded-pill shadow-2xl backdrop-blur-md" role="group" aria-label="Moneda">
+              {(['PEN', 'USD'] as const).map((code) => (
                 <button
+                  key={code}
                   type="button"
-                  onClick={() => setCurrency('PEN')}
-                  className={`px-5 py-2 rounded-full text-xs md:text-sm font-heading font-black uppercase tracking-wider transition-all duration-300 ${
-                    currency === 'PEN'
+                  onClick={() => setCurrency(code)}
+                  aria-pressed={currency === code}
+                  className={`px-5 py-2 rounded-pill text-xs md:text-sm font-heading font-black uppercase tracking-wider transition-all duration-300 ${
+                    currency === code
                       ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.6)]'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  Soles (PEN S/.)
+                  {code === 'PEN' ? 'Soles (S/)' : 'Dólares ($)'}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrency('USD')}
-                  className={`px-5 py-2 rounded-full text-xs md:text-sm font-heading font-black uppercase tracking-wider transition-all duration-300 ${
-                    currency === 'USD'
-                      ? 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.6)]'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Dólares (USD $)
-                </button>
-              </div>
+              ))}
             </div>
           </div>
         </FadeIn>
 
         {/* Pricing Cards Grid */}
-        <FadeIn delay={200}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch mb-20">
-            {plans.map((plan) => {
-              const IconComponent = plan.icon;
-              const priceDisplay = currency === 'PEN' ? `S/ ${plan.pricePEN}` : `$ ${plan.priceUSD}`;
-              const whatsappUrl = `https://wa.me/51953095173?text=${encodeURIComponent(plan.whatsappMessage)}`;
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-6 items-stretch mb-20">
+          {plans.map((plan, i) => {
+            const IconComponent = plan.icon;
+            const priceDisplay = currency === 'PEN' ? `S/ ${plan.pricePEN}` : `$ ${plan.priceUSD}`;
+            const whatsappUrl = `https://wa.me/51953095173?text=${encodeURIComponent(plan.whatsappMessage)}`;
+            const isExpanded = Boolean(expanded[plan.id]);
+            const shownFeatures = isExpanded ? plan.features : plan.features.slice(0, VISIBLE_FEATURES);
+            const hiddenCount = plan.features.length - VISIBLE_FEATURES;
 
-              return (
+            return (
+              <FadeIn key={plan.id} delay={i * 120} className={plan.isPopular ? 'lg:-translate-y-4' : ''}>
                 <div
-                  key={plan.id}
-                  className={`relative flex flex-col rounded-sm transition-all duration-300 ${
+                  className={`relative h-full rounded-3xl ${
                     plan.isPopular
-                      ? 'bg-gradient-to-b from-[#131d35] via-[#0f172a] to-[#0c121f] border-2 border-blue-500 shadow-[0_0_50px_rgba(49,98,250,0.25)] lg:-translate-y-4 hover:lg:-translate-y-6'
-                      : 'bg-slate-900/70 border border-slate-800 hover:border-slate-700 shadow-xl hover:-translate-y-2 backdrop-blur-sm'
+                      ? 'p-[1.5px] bg-gradient-to-b from-blue-400 via-blue-600 to-cyan-400 shadow-[0_0_60px_rgba(37,99,235,0.35)]'
+                      : ''
                   }`}
                 >
-                  {/* Popular Floating Badge */}
                   {plan.isPopular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-heading font-black text-xs uppercase px-4 py-1.5 rounded-full tracking-wider shadow-lg flex items-center gap-1.5 whitespace-nowrap z-20">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-heading font-black text-xs uppercase px-4 py-1.5 rounded-pill tracking-wider shadow-lg flex items-center gap-1.5 whitespace-nowrap z-20">
                       <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                       {plan.badge}
                     </div>
                   )}
 
-                  {/* Top Header Card */}
-                  <div className="p-8 pb-6 border-b border-slate-800/80">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`w-12 h-12 rounded-sm flex items-center justify-center ${
-                        plan.isPopular ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-800 text-blue-400'
-                      }`}>
-                        <IconComponent className="w-6 h-6" />
-                      </div>
-                      {!plan.isPopular && plan.badge && (
-                        <span className="text-[11px] font-heading font-bold uppercase tracking-wider text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-                          {plan.badge}
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="font-heading text-2xl font-black uppercase [font-variation-settings:'wdth'_125] text-white mb-2">
-                      {plan.name}
-                    </h3>
-                    <p className="text-xs uppercase font-bold tracking-wider text-blue-400 mb-4">
-                      {plan.tagline}
-                    </p>
-                    <p className="text-sm text-slate-400 leading-relaxed min-h-[40px]">
-                      {plan.description}
-                    </p>
-
-                    {/* Price Block */}
-                    <div className="mt-6 pt-6 border-t border-slate-800 flex items-baseline gap-2">
-                      <span className="font-heading text-4xl md:text-5xl font-black uppercase text-white tracking-tight">
-                        {priceDisplay}
-                      </span>
-                      <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">
-                        / pago único
-                      </span>
-                    </div>
-
-                    {/* Delivery Time Badge */}
-                    <div className="mt-4 inline-flex items-center text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-3 py-1.5 rounded-sm">
-                      <Clock className="w-3.5 h-3.5 mr-1.5 shrink-0" />
-                      <span>Entrega estimada: {plan.deliveryTime}</span>
-                    </div>
-                  </div>
-
-                  {/* Features List */}
-                  <div className="p-8 pt-6 flex-grow flex flex-col justify-between">
-                    <div>
-                      <p className="text-xs uppercase font-heading font-black tracking-widest text-slate-400 mb-4">
-                        ¿Qué incluye este plan?
-                      </p>
-                      <ul className="space-y-3.5">
-                        {plan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start text-sm text-slate-300 leading-snug">
-                            <CheckCircle2 className={`w-4 h-4 mr-2.5 mt-0.5 shrink-0 ${
-                              plan.isPopular ? 'text-blue-400' : 'text-emerald-400'
-                            }`} />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* CTAs */}
-                    <div className="mt-8 pt-6 border-t border-slate-800">
-                      <a
-                        href={whatsappUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => {
-                          const currentPrice = currency === 'PEN' ? plan.pricePEN : plan.priceUSD;
-                          trackPlanClick(plan.name, currentPrice, currency);
-                        }}
-                        className={`w-full py-4 px-6 rounded-sm font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-sm md:text-base flex items-center justify-center gap-2.5 transition-all shadow-md group ${
-                          plan.isPopular
-                            ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_25px_rgba(37,99,235,0.4)] hover:shadow-[0_0_35px_rgba(37,99,235,0.6)]'
-                            : 'bg-transparent border-2 border-slate-600 hover:border-white text-white hover:bg-white hover:text-[#0c121f]'
-                        }`}
-                      >
-                        <WhatsAppIcon className="w-5 h-5 fill-current text-white group-hover:scale-110 transition-transform" />
-                        <span>Elegir {plan.name}</span>
-                        <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform ml-1" />
-                      </a>
-
-                      {/* Secondary Link for contact modal */}
-                      {onOpenContact && (
-                        <div className="text-center mt-3">
-                          <button
-                            type="button"
-                            onClick={() => onOpenContact(plan.name)}
-                            className="text-xs text-slate-400 hover:text-blue-400 transition-colors underline-offset-4 hover:underline"
+                  <SpotlightCard
+                    className={`group flex flex-col h-full rounded-3xl transition-transform duration-500 hover:-translate-y-1 ${
+                      plan.isPopular ? 'bg-ink-900' : 'bg-ink-950/70 border border-white/10 backdrop-blur-sm'
+                    }`}
+                  >
+                    <div className="relative z-10 flex flex-col h-full">
+                      {/* Cabecera */}
+                      <div className="p-7 md:p-8 pb-6 border-b border-white/10">
+                        <div className="flex items-center justify-between mb-5">
+                          <div
+                            className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+                              plan.isPopular
+                                ? 'bg-gradient-to-br from-blue-500 to-cyan-400 text-white shadow-[0_8px_24px_-6px_rgba(34,211,238,0.5)]'
+                                : 'bg-white/5 border border-white/10 text-blue-300'
+                            }`}
                           >
-                            ¿Prefieres enviar un formulario? Haz clic aquí
-                          </button>
+                            <IconComponent className="w-6 h-6" />
+                          </div>
+                          {!plan.isPopular && plan.badge && (
+                            <span className="text-[11px] font-heading font-bold uppercase tracking-wider text-slate-300 bg-white/5 px-3 py-1 rounded-pill border border-white/10">
+                              {plan.badge}
+                            </span>
+                          )}
                         </div>
-                      )}
+
+                        <h3 className="font-heading text-2xl font-black text-white mb-1">{plan.name}</h3>
+                        <p className="text-xs uppercase font-bold tracking-wider text-cyan-300 mb-4">{plan.tagline}</p>
+                        <p className="text-sm text-slate-400 leading-relaxed min-h-[84px]">{plan.description}</p>
+
+                        <div className="mt-6 pt-6 border-t border-white/10 flex items-baseline gap-2">
+                          <span key={currency} className="animate-fade-up font-heading text-4xl md:text-5xl font-black text-white tracking-tight tabular-nums">
+                            {priceDisplay}
+                          </span>
+                          <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">/ pago único</span>
+                        </div>
+
+                        <div className="mt-4 inline-flex items-center text-xs font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-400/20 px-3 py-1.5 rounded-pill">
+                          <Clock className="w-3.5 h-3.5 mr-1.5 shrink-0" />
+                          <span>Entrega estimada: {plan.deliveryTime}</span>
+                        </div>
+                      </div>
+
+                      {/* Características */}
+                      <div className="p-7 md:p-8 pt-6 flex-grow flex flex-col justify-between">
+                        <div>
+                          <p className="text-xs uppercase font-heading font-black tracking-widest text-slate-400 mb-4">
+                            ¿Qué incluye este plan?
+                          </p>
+                          <ul className="space-y-3">
+                            {shownFeatures.map((feature) => (
+                              <li key={feature} className="flex items-start text-sm text-slate-300 leading-snug">
+                                <CheckCircle2
+                                  className={`w-4 h-4 mr-2.5 mt-0.5 shrink-0 ${plan.isPopular ? 'text-cyan-400' : 'text-emerald-400'}`}
+                                />
+                                <span>{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          {hiddenCount > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setExpanded((prev) => ({ ...prev, [plan.id]: !isExpanded }))}
+                              aria-expanded={isExpanded}
+                              className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-blue-300 hover:text-blue-200 transition-colors"
+                            >
+                              {isExpanded ? 'Ver menos' : `Ver ${hiddenCount} características más`}
+                              <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* CTAs */}
+                        <div className="mt-8 pt-6 border-t border-white/10">
+                          <a
+                            href={whatsappUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => {
+                              const currentPrice = currency === 'PEN' ? plan.pricePEN : plan.priceUSD;
+                              trackPlanClick(plan.name, currentPrice, currency);
+                            }}
+                            className={`glow-button w-full py-4 px-6 rounded-pill font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-sm flex items-center justify-center gap-2.5 transition-all group/cta ${
+                              plan.isPopular
+                                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_25px_rgba(37,99,235,0.45)] hover:shadow-[0_0_35px_rgba(37,99,235,0.65)]'
+                                : 'bg-white/5 border border-white/20 hover:bg-white hover:text-ink-950 text-white'
+                            }`}
+                          >
+                            <WhatsAppIcon className="w-5 h-5" />
+                            <span>Elegir {plan.name}</span>
+                            <ArrowRight className="w-4 h-4 transform group-hover/cta:translate-x-1 transition-transform" />
+                          </a>
+
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </SpotlightCard>
                 </div>
-              );
-            })}
-          </div>
-        </FadeIn>
+              </FadeIn>
+            );
+          })}
+        </div>
 
-        {/* Four Trust Pillars / Guarantee Strip */}
-        <FadeIn delay={300}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            <div className="bg-slate-900/60 border border-slate-800/80 p-6 rounded-sm hover:border-blue-500/40 transition-colors">
-              <div className="w-10 h-10 bg-blue-600/20 text-blue-400 rounded-sm flex items-center justify-center mb-4">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <h4 className="font-heading text-lg font-black uppercase [font-variation-settings:'wdth'_125] text-white mb-2">
-                Sin Mensualidades Ocultas
-              </h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                El sitio web y código son 100% tuyos. No pagarás cuotas mensuales forzosas de mantenimiento de plataforma.
-              </p>
-            </div>
+        {/* Pilares de confianza */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+          {PILLARS.map((pillar, i) => {
+            const Icon = pillar.icon;
+            return (
+              <FadeIn key={pillar.title} delay={i * 100}>
+                <div className="h-full rounded-3xl border border-white/10 bg-ink-950/60 p-6 hover:border-blue-400/40 transition-colors">
+                  <div className="w-10 h-10 mb-4 rounded-xl bg-blue-500/15 border border-blue-400/20 text-blue-300 flex items-center justify-center">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-heading text-base font-extrabold text-white mb-2">{pillar.title}</h4>
+                  <p className="text-sm text-slate-400 leading-relaxed">{pillar.text}</p>
+                </div>
+              </FadeIn>
+            );
+          })}
+        </div>
 
-            <div className="bg-slate-900/60 border border-slate-800/80 p-6 rounded-sm hover:border-blue-500/40 transition-colors">
-              <div className="w-10 h-10 bg-blue-600/20 text-blue-400 rounded-sm flex items-center justify-center mb-4">
-                <Cloud className="w-5 h-5" />
-              </div>
-              <h4 className="font-heading text-lg font-black uppercase [font-variation-settings:'wdth'_125] text-white mb-2">
-                Dominio y Hosting Gratis
-              </h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Tu proyecto incluye dominio .com y hosting SSD de alta velocidad con certificado SSL HTTPS por 1 año completo.
-              </p>
-            </div>
+        {/* Proyecto a medida */}
+        <FadeIn>
+          <div className="relative overflow-hidden rounded-3xl border border-blue-400/30 bg-gradient-to-r from-blue-950/80 via-ink-900 to-blue-950/80 p-8 md:p-12 shadow-2xl">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/15 rounded-pill blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
 
-            <div className="bg-slate-900/60 border border-slate-800/80 p-6 rounded-sm hover:border-blue-500/40 transition-colors">
-              <div className="w-10 h-10 bg-blue-600/20 text-blue-400 rounded-sm flex items-center justify-center mb-4">
-                <Zap className="w-5 h-5" />
-              </div>
-              <h4 className="font-heading text-lg font-black uppercase [font-variation-settings:'wdth'_125] text-white mb-2">
-                Carga Ultrarrápida y SEO
-              </h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Desarrollado con estándares web modernos para cargar en menos de 2 segundos y conseguir mejor posición en Google.
-              </p>
-            </div>
-
-            <div className="bg-slate-900/60 border border-slate-800/80 p-6 rounded-sm hover:border-blue-500/40 transition-colors">
-              <div className="w-10 h-10 bg-blue-600/20 text-blue-400 rounded-sm flex items-center justify-center mb-4">
-                <Headphones className="w-5 h-5" />
-              </div>
-              <h4 className="font-heading text-lg font-black uppercase [font-variation-settings:'wdth'_125] text-white mb-2">
-                Soporte y Garantía Real
-              </h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Atención directa con nuestro equipo técnico de ingeniería. Garantía incluida ante cualquier bug o consulta.
-              </p>
-            </div>
-          </div>
-        </FadeIn>
-
-        {/* Custom Project / Enterprise Banner */}
-        <FadeIn delay={400}>
-          <div className="bg-gradient-to-r from-blue-950/80 via-slate-900 to-blue-950/80 border-2 border-blue-500/40 rounded-sm p-8 md:p-12 relative overflow-hidden shadow-2xl">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
-            
             <div className="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
               <div className="text-center lg:text-left max-w-2xl">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-600/20 text-blue-400 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-blue-500/30">
-                  <Layers className="w-3.5 h-3.5" />
-                  Software y Sistemas a Medida
-                </div>
-                <h3 className="font-heading text-2xl md:text-3xl lg:text-4xl font-black uppercase [font-variation-settings:'wdth'_125] text-white mb-4">
+                <h3 className="font-heading text-2xl md:text-3xl font-black text-white mb-4 leading-tight">
                   ¿Necesitas un sistema personalizado o desarrollo especial?
                 </h3>
                 <p className="text-slate-300 text-sm md:text-base leading-relaxed">
@@ -375,20 +348,11 @@ export const WebPlans: React.FC<WebPlansProps> = ({ onOpenContact }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackCustomEnterpriseClick()}
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-sm md:text-base px-8 py-4 rounded-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all whitespace-nowrap"
+                  className="glow-button bg-blue-600 hover:bg-blue-500 text-white font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-sm px-8 py-4 rounded-pill flex items-center justify-center gap-2 shadow-[0_0_24px_rgba(37,99,235,0.45)] transition-colors whitespace-nowrap"
                 >
-                  <WhatsAppIcon className="w-5 h-5 fill-current" />
-                  <span>Cotizar a Medida</span>
+                  <WhatsAppIcon className="w-5 h-5" />
+                  <span>Cotizar a medida</span>
                 </a>
-                {onOpenContact && (
-                  <button
-                    type="button"
-                    onClick={() => onOpenContact('Software / Proyecto Web a Medida')}
-                    className="bg-transparent border-2 border-slate-500 hover:border-white text-white hover:bg-white hover:text-[#0c121f] font-heading font-black uppercase [font-variation-settings:'wdth'_125] text-sm md:text-base px-8 py-4 rounded-sm transition-colors whitespace-nowrap"
-                  >
-                    Abrir Formulario
-                  </button>
-                )}
               </div>
             </div>
           </div>

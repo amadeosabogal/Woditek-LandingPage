@@ -91,6 +91,108 @@
     linear-gradient(to bottom, rgba(0, 71, 255, 0.03) 1px, transparent 1px);
 }
 
+/* Cuadrícula del hero, desvanecida hacia los bordes */
+.hero-grid {
+  background-size: 48px 48px;
+  background-image:
+    linear-gradient(to right, rgba(96, 165, 250, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(96, 165, 250, 0.07) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse at 60% 40%, black 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 60% 40%, black 20%, transparent 75%);
+}
+
+/* Texto con degradado de marca */
+.text-gradient {
+  background: linear-gradient(90deg, #60a5fa 0%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-animated {
+  background: linear-gradient(90deg, #60a5fa, #22d3ee, #818cf8, #60a5fa);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Tarjeta con foco que sigue al cursor (variables --mx / --my las fija SpotlightCard) */
+.spotlight-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight-card::before,
+.spotlight-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.spotlight-card::before {
+  z-index: 1;
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(59, 130, 246, 0.16), transparent 45%);
+}
+
+.spotlight-card::after {
+  z-index: 2;
+  padding: 1px;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(96, 165, 250, 0.75), transparent 45%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+.spotlight-card:hover::before,
+.spotlight-card:hover::after {
+  opacity: 1;
+}
+
+/* Carrusel infinito con bordes desvanecidos */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Línea separadora con degradado */
+.hairline {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.35), transparent);
+}
+
+/* Cuadrícula tenue para secciones oscuras */
+.grid-fade {
+  background-size: 56px 56px;
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 25%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, #000 25%, transparent 75%);
+}
+
+/* Barra de pestañas horizontales sin scrollbar visible */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Respeta a quien pide menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Starry Space Background */
 .stars-container {
   position: absolute;
